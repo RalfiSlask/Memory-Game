@@ -1,8 +1,12 @@
-import React from 'react'
+import { ReactNode } from 'react'
+import SelectorLabel from './ui/SelectorLabel'
 
-const StartSelectionPanel = () => {
+const StartSelectionPanel: React.FC<{title: string, children?: ReactNode}> = ( {title, children} ) => {
   return (
-    <div>StartSelectionPanel</div>
+    <div className='flex flex-col gap-[11px]'>
+      <SelectorLabel text={title}/>
+      {children}
+    </div>
   )
 }
 
