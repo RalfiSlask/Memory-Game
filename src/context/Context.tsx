@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useState, useEffect } from "react";
 import { startMenuSettingsType } from "../types/types";
 
 const Context = createContext<ContextValueTypes | undefined>(undefined);
@@ -11,6 +11,7 @@ type ContextValueTypes = {
 type ContextType = {
     children: ReactNode;
 };
+
 
 export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
     const [startMenuSettings, setStartMenuSettings] = useState([
@@ -41,7 +42,8 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
           ]
         },  
       ]);
-      
+  
+
     const handleClickOnStartMenuButtons = (buttonLabel: string, panelId: number) => {
         const updatedStartMenuSettings = startMenuSettings.map(panel => {
             if(panel.id !== panelId) return panel;
@@ -57,8 +59,6 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
         })
         setStartMenuSettings(updatedStartMenuSettings)
     };  
-
-
 
     const contextValue = {
         startMenuSettings: startMenuSettings,

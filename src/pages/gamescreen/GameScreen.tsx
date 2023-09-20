@@ -3,12 +3,16 @@ import GameHeader from "./GameHeader";
 import UIContext from "../../context/UIContext";
 import { useContext } from "react";
 import MenuModal from "./MenuModal";
-import GameFooter from "./GameFooter";
+import FooterSolo from "./FooterSolo";
+import FooterMultiplayer from "./FooterMultiplayer";
+import Context from "../../context/Context";
+
 
 const GameScreen = () => {
     const uiContext = useContext(UIContext);
+    const context = useContext(Context);
 
-    if(!uiContext) {
+    if(!uiContext || !context) {
         throw new Error("Does not exist in contextProvider")
     }
 
@@ -19,10 +23,14 @@ const GameScreen = () => {
         <div className="w-[327px] md:w-[689px] xl:w-[1110px] mt-6 md:mt-[37px] xl:mt-[67px]">
             <GameHeader />
             <main></main>
+            <footer className='w-full flex justify-between items-end'>
+                <FooterMultiplayer />
+                <FooterSolo />
+            </footer>
         </div>
         {modals.menu && <MenuModal />}
         {modals.lightbox && <Lightbox />}
-        <GameFooter />
+   
     </div>
   )
 }
