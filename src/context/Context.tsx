@@ -43,7 +43,7 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
           ]
         },  
       ]);
-    const [selectedSettings, setSelectedSettings] = useState<SelectedSettingsType>({theme: "", playerNumbers: "", grid: ""})
+    const [selectedSettings, setSelectedSettings] = useState<SelectedSettingsType>({theme: "", playerNumbers: 1, grid: ""})
 
     useEffect(() => {
       let updatedSettings = {...selectedSettings}
@@ -53,7 +53,7 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
             if(setting.title === "Select Theme") {
               updatedSettings.theme = button.label;
             } else if(setting.title === "Number of Players") {
-              updatedSettings.playerNumbers = button.label;
+              updatedSettings.playerNumbers = Number(button.label);
             } else if(setting.title === "Grid Size") {
               updatedSettings.grid = button.label;
             }

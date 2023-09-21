@@ -20,6 +20,6 @@ export type StartMenuButtonType = {
 
 export type SelectedSettingsType = {
     theme: string;
-    playerNumbers: string;
+    playerNumbers: number;
     grid: string;
 };

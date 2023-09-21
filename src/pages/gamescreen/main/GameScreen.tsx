@@ -25,7 +25,7 @@ const GameScreen = () => {
             <GameHeader />
             <main></main>
             <footer className='flex justify-center'>
-                {selectedSettings.playerNumbers === "1" ? <FooterSolo /> : <FooterMultiplayer />}
+                {selectedSettings.playerNumbers === 1 ? <FooterSolo /> : <FooterMultiplayer />}
             </footer>
         </div>
         {modals.menu && <MenuModal />}
