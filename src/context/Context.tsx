@@ -1,10 +1,11 @@
 import { createContext, ReactNode, useState, useEffect } from "react";
-import { startMenuSettingsType } from "../types/types";
+import { SelectedSettingsType, StartMenuSettingsType } from "../types/types";
 
 const Context = createContext<ContextValueTypes | undefined>(undefined);
 
 type ContextValueTypes = {
-    startMenuSettings: startMenuSettingsType[];
+    startMenuSettings: StartMenuSettingsType[];
+    selectedSettings: SelectedSettingsType;
     handleClickOnStartMenuButtons: (buttonLabel: string, panelId: number) => void;
 };
 
@@ -25,7 +26,7 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
         },
         {
           id: 2,
-          title: "Numbers of Players",
+          title: "Number of Players",
           buttons: [
             { type: "small", label: "1", selected: true},
             { type: "small", label: "2", selected: false},
@@ -42,7 +43,29 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
           ]
         },  
       ]);
-  
+    const [selectedSettings, setSelectedSettings] = useState<SelectedSettingsType>({theme: "", playerNumbers: "", grid: ""})
+
+    useEffect(() => {
+      let updatedSettings = {...selectedSettings}
+      startMenuSettings.forEach(setting => {
+        setting.buttons.forEach(button => {
+          if(button.selected) {
+            if(setting.title === "Select Theme") {
+              updatedSettings.theme = button.label;
+            } else if(setting.title === "Number of Players") {
+              updatedSettings.playerNumbers = button.label;
+            } else if(setting.title === "Grid Size") {
+              updatedSettings.grid = button.label;
+            }
+          }
+        });
+      }); 
+      setSelectedSettings(updatedSettings)
+    }, [startMenuSettings]);
+
+    useEffect(() => {
+      console.log(selectedSettings)
+    }, [selectedSettings])
 
     const handleClickOnStartMenuButtons = (buttonLabel: string, panelId: number) => {
         const updatedStartMenuSettings = startMenuSettings.map(panel => {
@@ -62,7 +85,8 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
 
     const contextValue = {
         startMenuSettings: startMenuSettings,
-        handleClickOnStartMenuButtons: handleClickOnStartMenuButtons
+        selectedSettings: selectedSettings,
+        handleClickOnStartMenuButtons: handleClickOnStartMenuButtons,
     }
 
     return (

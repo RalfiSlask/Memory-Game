@@ -6,14 +6,20 @@ export type StartMenuButtonPropsType = {
     onClick: () => void;
 };
 
-export type startMenuSettingsType = {
+export type StartMenuSettingsType = {
     id: number;
     title: string;
-    buttons: startMenuButtonType[];
+    buttons: StartMenuButtonType[];
 };
 
-export type startMenuButtonType = {
+export type StartMenuButtonType = {
     type: string;
     label: string;
     selected: boolean;
+};
+
+export type SelectedSettingsType = {
+    theme: string;
+    playerNumbers: string;
+    grid: string;
 };

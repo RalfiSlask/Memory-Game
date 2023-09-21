@@ -1,5 +1,5 @@
-import HeaderButton from "./HeaderButton"
-import UIContext from "../../context/UIContext"
+import HeaderButton from "../HeaderButton"
+import UIContext from "../../../context/UIContext"
 import { useContext } from "react";
 
 const GameHeader = () => {

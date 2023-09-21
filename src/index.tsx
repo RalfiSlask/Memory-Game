@@ -4,7 +4,7 @@ import './index.css';
 import StartScreen from './pages/startscreen/StartScreen';
 import { ContextProvider } from './context/Context';
 import { HashRouter, Routes, Route } from 'react-router-dom';
-import GameScreen from './pages/gamescreen/GameScreen';
+import GameScreen from './pages/gamescreen/main/GameScreen';
 import { UIContextProvider } from './context/UIContext';
 
 let root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
