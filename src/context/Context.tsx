@@ -16,6 +16,9 @@ type ContextType = {
 export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
   const [countdown, setCountdown] = useState("1:59");
   const [moves, setMoves] = useState("0");
+
+
+  const [numbersList, setNumbersList] = useState<number[]>([]);  
   const [startMenuSettings, setStartMenuSettings] = useState([
         {
           id: 1,
@@ -64,6 +67,26 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
       setSelectedSettings(updatedSettings)
     }, [startMenuSettings]);
 
+    useEffect(() => {
+      let count = 0;
+      console.log(selectedSettings)
+      const gridSize = selectedSettings.grid === "4x4" ? 8 : 16
+      const numberArray = Array.from( {length: gridSize} , 
+        // map function in Array.from that sets the numbers according to gridSize
+        (item) => {if(count < gridSize) {count += 1;} return item = count;})
+        // double each item in the array
+        .flatMap(item => [item, item])
+        // randomize each location of the item in the array
+        .sort((a, b) => 0.5 - Math.random());
+      setNumbersList(numberArray)
+    }, [selectedSettings.grid]);
+
+    useEffect(() => {
+      console.log(numbersList)
+      console.log(selectedSettings)
+    }, [selectedSettings])
+    
+  
     const handleClickOnStartMenuButtons = (buttonLabel: string, panelId: number) => {
         const updatedStartMenuSettings = startMenuSettings.map(panel => {
             if(panel.id !== panelId) return panel;

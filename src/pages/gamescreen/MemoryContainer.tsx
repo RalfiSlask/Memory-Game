@@ -1,8 +1,8 @@
 import Context from "../../context/Context";
 import UIContext from "../../context/UIContext";
-import { useContext, useEffect } from "react";
-import FourByFourMemoryPiece from "./FourByFourMemoryPiece";
-import SixBySixMemoryPiece from "./SixBySixMemoryPiece";
+import { useContext } from "react";
+import MemoryPiece from "./MemoryPiece";
+
 
 const MemoryContainer = () => {
   const context = useContext(Context);
@@ -14,15 +14,25 @@ const MemoryContainer = () => {
 
   const { selectedSettings } = context;
   const memoryArray = Array.from( {length: selectedSettings.grid === "4x4" ? 16 : 36} )
+  const fourByFourDimensions = "w-[72.53px] h-[72.53px] md:w-[118px] md:h-[118px] rounded-[59px]";
+  const sixBysixDimensions = "w-[46.878px] h-[46.878px] md:w-[82px] md:h-[82px] rounded-[41px]";
 
-  useEffect(() => {
-    console.log(selectedSettings)
-  })
+  const dimensions = selectedSettings.grid === "4x4" ? fourByFourDimensions :  sixBysixDimensions;
 
   return (
     <div className={`${selectedSettings.grid === "4x4" ? "gap-3 md:gap-5" : "gap-[9px] md:gap-4"} w-full flex flex-wrap h-[327px] justify-center md:min-w-[532px] md:max-w-[572px] md:min-h-[532px] md:max-h-[572px] mt-20 md:mt-[157px] xl:mt-[85px] mb-[102px] md:mb-[126px] xl:mb-[102px]`}>
       {memoryArray.map((piece, index) => {
-        return selectedSettings.grid === "4x4" ? <FourByFourMemoryPiece key={index}/> : <SixBySixMemoryPiece key={index}/>
+        return selectedSettings.grid === "4x4" ? 
+        <MemoryPiece
+          key={index}
+          id={index}
+          dimensions={dimensions}
+        /> : 
+        <MemoryPiece
+          key={index}
+          id={index}
+          dimensions={dimensions}
+          />
       })}
     </div>
   )
