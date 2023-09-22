@@ -13,9 +13,10 @@ type ContextType = {
     children: ReactNode;
 };
 
-
 export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
-    const [startMenuSettings, setStartMenuSettings] = useState([
+  const [countdown, setCountdown] = useState("1:59");
+  const [moves, setMoves] = useState("0");
+  const [startMenuSettings, setStartMenuSettings] = useState([
         {
           id: 1,
           title: "Select Theme",
@@ -63,10 +64,6 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
       setSelectedSettings(updatedSettings)
     }, [startMenuSettings]);
 
-    useEffect(() => {
-      console.log(selectedSettings)
-    }, [selectedSettings])
-
     const handleClickOnStartMenuButtons = (buttonLabel: string, panelId: number) => {
         const updatedStartMenuSettings = startMenuSettings.map(panel => {
             if(panel.id !== panelId) return panel;
@@ -87,7 +84,7 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
         startMenuSettings: startMenuSettings,
         selectedSettings: selectedSettings,
         handleClickOnStartMenuButtons: handleClickOnStartMenuButtons,
-    }
+    };
 
     return (
         <Context.Provider value={contextValue}>

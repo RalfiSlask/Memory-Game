@@ -3,18 +3,18 @@ import { createContext, ReactNode, useState, useEffect } from "react";
 type ModalsType = {
     lightbox: boolean;
     menu: boolean;
-}
+};
 
 type UIContextValueTypes = {
     screenSize: string;
     modals: ModalsType;
     openMenuModal: () => void;
     closeMenuModal: () => void;
-}
+};
 
 type UIContextType = {
     children: ReactNode;
-}
+};
 
 const UIContext = createContext<UIContextValueTypes | undefined>(undefined);
 

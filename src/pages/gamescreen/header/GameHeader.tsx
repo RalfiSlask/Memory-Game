@@ -1,4 +1,4 @@
-import HeaderButton from "../HeaderButton"
+import HeaderButton from "./HeaderButton"
 import UIContext from "../../../context/UIContext"
 import { useContext } from "react";
 

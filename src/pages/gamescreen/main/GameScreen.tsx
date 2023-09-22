@@ -6,6 +6,7 @@ import MenuModal from "../MenuModal";
 import FooterSolo from "../footer/FooterSolo";
 import FooterMultiplayer from "../footer/FooterMultiplayer";
 import Context from "../../../context/Context";
+import MemoryContainer from "../MemoryContainer";
 
 
 const GameScreen = () => {
@@ -23,7 +24,9 @@ const GameScreen = () => {
     <div className="flex flex-col items-center">
         <div className="w-[327px] md:w-[689px] xl:w-[1110px] mt-6 md:mt-[37px] xl:mt-[67px] flex flex-col items-center">
             <GameHeader />
-            <main></main>
+            <main>
+                <MemoryContainer />
+            </main>
             <footer className='flex justify-center'>
                 {selectedSettings.playerNumbers === 1 ? <FooterSolo /> : <FooterMultiplayer />}
             </footer>
