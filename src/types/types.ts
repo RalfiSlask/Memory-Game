@@ -23,3 +23,15 @@ export type SelectedSettingsType = {
     playerNumbers: number;
     grid: string;
 };
+
+export type NumbersListType = {
+    number: number;
+    active: boolean;
+    isClicked: boolean;
+  };
+  
+  export type IconsListType = {
+    icon: string;
+    active: boolean;
+    isClicked: boolean;
+  };

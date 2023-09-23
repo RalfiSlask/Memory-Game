@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useState, useEffect, useMemo } from "react";
-import { SelectedSettingsType, StartMenuSettingsType } from "../types/types";
+import { SelectedSettingsType, StartMenuSettingsType, IconsListType, NumbersListType } from "../types/types";
 import { getRandomArrayFromIconArray, getDoubledAndShuffledArray } from "../utils/HelperFuntioncs";
 
 const Context = createContext<ContextValueTypes | undefined>(undefined);
@@ -7,8 +7,8 @@ const Context = createContext<ContextValueTypes | undefined>(undefined);
 type ContextValueTypes = {
     startMenuSettings: StartMenuSettingsType[];
     selectedSettings: SelectedSettingsType;
-    numbersList: number[];
-    iconsList: string[];
+    numbersList: NumbersListType[];
+    iconsList: IconsListType[];
     handleClickOnStartMenuButtons: (buttonLabel: string, panelId: number) => void;
 };
 
@@ -48,22 +48,25 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
         },  
       ]);
     const [selectedSettings, setSelectedSettings] = useState<SelectedSettingsType>({theme: "Numbers", playerNumbers: 1, grid: "4x4"});
-    const [numbersList, setNumbersList] = useState<number[]>([]);  
+    const [numbersList, setNumbersList] = useState<NumbersListType[]>([]);  
 
     const iconArray = ["anchor.svg", "car.svg", "chemistry.svg", "chinese.svg", "hand.svg", "moon.svg", "snow.svg", "soccer.svg", "sun.svg", "flower.svg", "horse.svg", "key.svg", "rectangle.svg", "rhombus.svg", "star.svg", "triangle.svg", "circle.svg", "leaf.svg"];
 
     
 
-    const iconsList = useMemo(() => {
+    const iconsList: IconsListType[] = useMemo(() => {
       if(selectedSettings.theme !== "Icons") return [];
       let emptyArray: string[] = [];
       // get 8 random items from the original iconArray
       const randomArray = getRandomArrayFromIconArray(iconArray, 8, emptyArray);
       // double each item in the array and then shuffle the order
       const fourByfourRandomArray = getDoubledAndShuffledArray(randomArray);
+      const fourByfourFinalArray = fourByfourRandomArray.map(icon => {return {icon: icon, active: false, isClicked: false}})
       const sixBysixRandomArray = getDoubledAndShuffledArray(iconArray);
+      const sixBysixFinalArray = sixBysixRandomArray.map(icon => {return {icon: icon, active: false, isClicked: false}})
+      console.log(fourByfourFinalArray)
 
-      return selectedSettings.grid === "4x4" ? fourByfourRandomArray : sixBysixRandomArray
+      return selectedSettings.grid === "4x4" ? fourByfourFinalArray : sixBysixFinalArray
 
     }, [selectedSettings.grid, selectedSettings.theme])
     
@@ -98,7 +101,9 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
         // double each item in the array
         .flatMap(item => [item, item])
         // randomize each location of the item in the array
-        .sort((a, b) => 0.5 - Math.random());
+        .sort((a, b) => 0.5 - Math.random())
+        .map(number => {return {number: number, active: false, isClicked: false}})
+        console.log(numberArray)
         setNumbersList(numberArray)
     }, [selectedSettings]);
   

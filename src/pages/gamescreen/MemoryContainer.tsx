@@ -26,14 +26,16 @@ const MemoryContainer = () => {
           index={index}
           dimensions={fourByFourDimensions}
           pieceLarge={true}
-          memoryItem={selectedSettings.theme === "Numbers" ? numbersList[index] : iconsList[index]}
+          number={numbersList[index]}
+          icon={iconsList[index]}
         /> : 
         <MemoryPiece
           key={index}
           index={index}
           dimensions={sixBysixDimensions}
           pieceLarge={false}
-          memoryItem={selectedSettings.theme === "Numbers" ? numbersList[index] : iconsList[index]}
+          number={numbersList[index]}
+          icon={iconsList[index]}
           />
       })}
     </div>
