@@ -6,6 +6,7 @@ const Context = createContext<ContextValueTypes | undefined>(undefined);
 type ContextValueTypes = {
     startMenuSettings: StartMenuSettingsType[];
     selectedSettings: SelectedSettingsType;
+    numbersList: number[];
     handleClickOnStartMenuButtons: (buttonLabel: string, panelId: number) => void;
 };
 
@@ -16,9 +17,6 @@ type ContextType = {
 export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
   const [countdown, setCountdown] = useState("1:59");
   const [moves, setMoves] = useState("0");
-
-
-  const [numbersList, setNumbersList] = useState<number[]>([]);  
   const [startMenuSettings, setStartMenuSettings] = useState([
         {
           id: 1,
@@ -47,7 +45,34 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
           ]
         },  
       ]);
-    const [selectedSettings, setSelectedSettings] = useState<SelectedSettingsType>({theme: "", playerNumbers: 1, grid: ""})
+    const [selectedSettings, setSelectedSettings] = useState<SelectedSettingsType>({theme: "Numbers", playerNumbers: 1, grid: "4x4"});
+    const [numbersList, setNumbersList] = useState<number[]>([]);  
+    const [iconsList, setIconsList] = useState([""]);
+
+    useEffect(() => {
+
+      const iconArray = ["anchor.svg", "car.svg", "chemistry.svg", "chinese.svg", "hand.svg", "moon.svg", "snow.svg", "soccer.svg", "sun.svg", "flower.svg", "horse.svg", "key.svg", "rectangle.svg", "rhombus.svg", "star.svg", "triangle.svg", "circle.svg", "leaf.svg"];
+      
+      let fourArray = [];
+      
+      
+      for(let i = 0; i < 8; i++) {
+        let randomIndex = Math.floor(Math.random() * iconArray.length);
+        if(fourArray[i] === iconArray[randomIndex]) {
+          console.log("hej")
+        } else {
+          fourArray.push(iconArray[randomIndex])
+        }
+        
+      }
+       
+      console.log(fourArray)
+      const fourByfourRandomArray = iconArray.sort((a, b) => 0.5 - Math.random());
+      const sixBysixRandomArray = iconArray.flatMap(item => [item, item]).sort((a, b) => 0.5 - Math.random());
+      if(selectedSettings.theme === "Icons") {
+        selectedSettings.grid === "4x4" ? setIconsList(fourByfourRandomArray) : setIconsList(sixBysixRandomArray)
+      }
+    }, [selectedSettings.grid, selectedSettings.theme])
 
     useEffect(() => {
       let updatedSettings = {...selectedSettings}
@@ -69,8 +94,7 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
 
     useEffect(() => {
       let count = 0;
-      console.log(selectedSettings)
-      const gridSize = selectedSettings.grid === "4x4" ? 8 : 16
+      const gridSize = selectedSettings.grid === "4x4" ? 8 : 18
       const numberArray = Array.from( {length: gridSize} , 
         // map function in Array.from that sets the numbers according to gridSize
         (item) => {if(count < gridSize) {count += 1;} return item = count;})
@@ -78,14 +102,8 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
         .flatMap(item => [item, item])
         // randomize each location of the item in the array
         .sort((a, b) => 0.5 - Math.random());
-      setNumbersList(numberArray)
-    }, [selectedSettings.grid]);
-
-    useEffect(() => {
-      console.log(numbersList)
-      console.log(selectedSettings)
-    }, [selectedSettings])
-    
+        setNumbersList(numberArray)
+    }, [selectedSettings]);
   
     const handleClickOnStartMenuButtons = (buttonLabel: string, panelId: number) => {
         const updatedStartMenuSettings = startMenuSettings.map(panel => {
@@ -106,6 +124,7 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
     const contextValue = {
         startMenuSettings: startMenuSettings,
         selectedSettings: selectedSettings,
+        numbersList: numbersList,
         handleClickOnStartMenuButtons: handleClickOnStartMenuButtons,
     };
 
