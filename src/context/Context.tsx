@@ -61,10 +61,10 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
       const randomArray = getRandomArrayFromIconArray(iconArray, 8, emptyArray);
       // double each item in the array and then shuffle the order
       const fourByfourRandomArray = getDoubledAndShuffledArray(randomArray);
-      const fourByfourFinalArray = fourByfourRandomArray.map(icon => {return {icon: icon, active: false, isClicked: false}})
       const sixBysixRandomArray = getDoubledAndShuffledArray(iconArray);
-      const sixBysixFinalArray = sixBysixRandomArray.map(icon => {return {icon: icon, active: false, isClicked: false}})
-      console.log(fourByfourFinalArray)
+      // add active and isClicked to each item to keep track of user interactions
+      const fourByfourFinalArray = fourByfourRandomArray.map(icon => {return {icon: icon, active: false, isClicked: false}});
+      const sixBysixFinalArray = sixBysixRandomArray.map(icon => {return {icon: icon, active: false, isClicked: false}});
 
       return selectedSettings.grid === "4x4" ? fourByfourFinalArray : sixBysixFinalArray
 
@@ -89,10 +89,6 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
     }, [startMenuSettings]);
 
     useEffect(() => {
-      console.log(numbersList)
-    })
-
-    useEffect(() => {
       let count = 0;
       const gridSize = selectedSettings.grid === "4x4" ? 8 : 18
       const numberArray = Array.from( {length: gridSize} , 
@@ -102,8 +98,8 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
         .flatMap(item => [item, item])
         // randomize each location of the item in the array
         .sort((a, b) => 0.5 - Math.random())
+        // add active and isClicked to keep track of user interactions
         .map(number => {return {number: number, active: false, isClicked: false}})
-        console.log(numberArray)
         setNumbersList(numberArray)
     }, [selectedSettings]);
   
