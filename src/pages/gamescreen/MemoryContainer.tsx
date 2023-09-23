@@ -12,7 +12,7 @@ const MemoryContainer = () => {
       throw new Error("Does not exist in contextProvider")
   };
 
-  const { selectedSettings, numbersList } = context;
+  const { selectedSettings, numbersList, iconsList } = context;
   const memoryArray = Array.from( {length: selectedSettings.grid === "4x4" ? 16 : 36} )
   const fourByFourDimensions = "w-[72.53px] h-[72.53px] md:w-[118px] md:h-[118px] rounded-[59px]";
   const sixBysixDimensions = "w-[46.878px] h-[46.878px] md:w-[82px] md:h-[82px] rounded-[41px]";
@@ -23,17 +23,17 @@ const MemoryContainer = () => {
         return selectedSettings.grid === "4x4" ? 
         <MemoryPiece
           key={index}
-          id={index}
+          index={index}
           dimensions={fourByFourDimensions}
-          memoryItem={numbersList[index]}
           pieceLarge={true}
+          memoryItem={selectedSettings.theme === "Numbers" ? numbersList[index] : iconsList[index]}
         /> : 
         <MemoryPiece
           key={index}
-          id={index}
+          index={index}
           dimensions={sixBysixDimensions}
-          memoryItem={numbersList[index]}
           pieceLarge={false}
+          memoryItem={selectedSettings.theme === "Numbers" ? numbersList[index] : iconsList[index]}
           />
       })}
     </div>

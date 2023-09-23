@@ -1,21 +1,42 @@
-import { useState } from "react";
-import MemoryItem from "./MemoryItem";
+import { useState, useContext, useEffect, memo } from "react";
+import MemoryNumber from "./MemoryNumber";
+import Context from "../../context/Context";
+import MemoryIcon from "./MemoryIcon";
+
 
 type MemoryPiecePropsType = {
-    id: number;
+    index: number;
     dimensions: string;
-    memoryItem: number;
+    memoryItem: number | string;
     pieceLarge: boolean;
+    icon?: string;
 };
 
-const MemoryPiece: React.FC<MemoryPiecePropsType> = ( {id, dimensions, memoryItem, pieceLarge} ) => {
+const MemoryPiece: React.FC<MemoryPiecePropsType> = ( {index, dimensions, memoryItem, pieceLarge} ) => {
+    const context = useContext(Context);
 
-    const [isClicked, setIsClicked] = useState(false)
+    if(!context) {
+        throw new Error("Does not exist in contextProvider")
+    };
+
+    const { numbersList } = context;
+
+    useEffect(() => {
+        console.log(numbersList[index])
+    })
 
     return (
         <div className={`${dimensions} bg-[#304859] hover:bg-[#6395B8] cursor-pointer flex justify-center items-center`}>
-            <MemoryItem pieceLarge={pieceLarge} memoryItem={memoryItem}/>
-            <img src={"/assets/key.svg"} alt="anchor" />
+            {typeof memoryItem === "number" ? 
+            <MemoryNumber 
+                pieceLarge={pieceLarge} 
+                number={memoryItem}
+            /> : 
+            <MemoryIcon 
+                pieceLarge={pieceLarge} 
+                icon={memoryItem}
+            />
+            }
         </div>
     )
 }

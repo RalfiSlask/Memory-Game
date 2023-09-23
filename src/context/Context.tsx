@@ -1,5 +1,6 @@
-import { createContext, ReactNode, useState, useEffect } from "react";
+import { createContext, ReactNode, useState, useEffect, useMemo } from "react";
 import { SelectedSettingsType, StartMenuSettingsType } from "../types/types";
+import { getRandomArrayFromIconArray, getDoubledAndShuffledArray } from "../utils/HelperFuntioncs";
 
 const Context = createContext<ContextValueTypes | undefined>(undefined);
 
@@ -7,6 +8,7 @@ type ContextValueTypes = {
     startMenuSettings: StartMenuSettingsType[];
     selectedSettings: SelectedSettingsType;
     numbersList: number[];
+    iconsList: string[];
     handleClickOnStartMenuButtons: (buttonLabel: string, panelId: number) => void;
 };
 
@@ -47,33 +49,24 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
       ]);
     const [selectedSettings, setSelectedSettings] = useState<SelectedSettingsType>({theme: "Numbers", playerNumbers: 1, grid: "4x4"});
     const [numbersList, setNumbersList] = useState<number[]>([]);  
-    const [iconsList, setIconsList] = useState([""]);
 
-    useEffect(() => {
+    const iconArray = ["anchor.svg", "car.svg", "chemistry.svg", "chinese.svg", "hand.svg", "moon.svg", "snow.svg", "soccer.svg", "sun.svg", "flower.svg", "horse.svg", "key.svg", "rectangle.svg", "rhombus.svg", "star.svg", "triangle.svg", "circle.svg", "leaf.svg"];
 
-      const iconArray = ["anchor.svg", "car.svg", "chemistry.svg", "chinese.svg", "hand.svg", "moon.svg", "snow.svg", "soccer.svg", "sun.svg", "flower.svg", "horse.svg", "key.svg", "rectangle.svg", "rhombus.svg", "star.svg", "triangle.svg", "circle.svg", "leaf.svg"];
-      
-      let fourArray = [];
-      
-      
-      for(let i = 0; i < 8; i++) {
-        let randomIndex = Math.floor(Math.random() * iconArray.length);
-        if(fourArray[i] === iconArray[randomIndex]) {
-          console.log("hej")
-        } else {
-          fourArray.push(iconArray[randomIndex])
-        }
-        
-      }
-       
-      console.log(fourArray)
-      const fourByfourRandomArray = iconArray.sort((a, b) => 0.5 - Math.random());
-      const sixBysixRandomArray = iconArray.flatMap(item => [item, item]).sort((a, b) => 0.5 - Math.random());
-      if(selectedSettings.theme === "Icons") {
-        selectedSettings.grid === "4x4" ? setIconsList(fourByfourRandomArray) : setIconsList(sixBysixRandomArray)
-      }
+    
+
+    const iconsList = useMemo(() => {
+      if(selectedSettings.theme !== "Icons") return [];
+      let emptyArray: string[] = [];
+      // get 8 random items from the original iconArray
+      const randomArray = getRandomArrayFromIconArray(iconArray, 8, emptyArray);
+      // double each item in the array and then shuffle the order
+      const fourByfourRandomArray = getDoubledAndShuffledArray(randomArray);
+      const sixBysixRandomArray = getDoubledAndShuffledArray(iconArray);
+
+      return selectedSettings.grid === "4x4" ? fourByfourRandomArray : sixBysixRandomArray
+
     }, [selectedSettings.grid, selectedSettings.theme])
-
+    
     useEffect(() => {
       let updatedSettings = {...selectedSettings}
       startMenuSettings.forEach(setting => {
@@ -91,6 +84,10 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
       }); 
       setSelectedSettings(updatedSettings)
     }, [startMenuSettings]);
+
+    useEffect(() => {
+      console.log(numbersList)
+    })
 
     useEffect(() => {
       let count = 0;
@@ -125,6 +122,7 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
         startMenuSettings: startMenuSettings,
         selectedSettings: selectedSettings,
         numbersList: numbersList,
+        iconsList: iconsList,
         handleClickOnStartMenuButtons: handleClickOnStartMenuButtons,
     };
 

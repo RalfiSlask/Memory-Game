@@ -1,5 +1,5 @@
 <svg width="36" height="40" viewBox="0 0 36 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path id="Mask" d="M18 20C22.4183 20 26 16.4183 26 12C26 7.58172 22.4183 4 18 4C13.5817 4 10 7.58172 10 12C10 16.4183 13.5817 20 18 20Z" fill="black"/>
+    <path id="Mask" d="M18 20C22.4183 20 26 16.4183 26 12C26 7.58172 22.4183 4 18 4C13.5817 4 10 7.58172 10 12C10 16.4183 13.5817 20 18 20Z" fill="white"/>
 <!-- Code injected by live-server -->
 <script>
 	// <![CDATA[  <-- For SVG support
