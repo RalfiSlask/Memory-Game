@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useState, useEffect} from "react";
 import { SelectedSettingsType, StartMenuSettingsType, MemoryPieceType, PlayersType } from "../types/types";
-import { getRandomArrayFromIconArray, getDoubledAndShuffledArray } from "../utils/HelperFuntioncs";
+import { createNumberArray, createSixbySixArray, createFourByFourArray } from "../utils/HelperFuntioncs";
 
 const Context = createContext<ContextValueTypes | undefined>(undefined);
 
@@ -62,42 +62,16 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
     }, [selectedSettings.playerNumbers])
 
     useEffect(() => {
+      // updating memory pieces depnding on theme and gridsize
       if(selectedSettings.theme === "Icons") {
         let emptyArray: string[] = [];
-        // get 8 random items from the original iconArray
-        const randomArray = getRandomArrayFromIconArray(iconArray, 8, emptyArray);
-        // double each item in the array and then shuffle the order
-        const fourByfourRandomArray = getDoubledAndShuffledArray(randomArray);
-        const sixBysixRandomArray = getDoubledAndShuffledArray(iconArray);
-        // add active and isClicked to each item to keep track of user interactions
-        const fourByfourFinalArray = fourByfourRandomArray.map(icon => {return {memoryPiece: icon, active: false, isClicked: false}});
-        const sixBysixFinalArray = sixBysixRandomArray.map(icon => {return {memoryPiece: icon, active: false, isClicked: false}});
-  
-        selectedSettings.grid === "4x4" ? setMemoryPiecesList(fourByfourFinalArray) : setMemoryPiecesList(sixBysixFinalArray)
+        const finalArray = selectedSettings.grid === "4x4" ? createFourByFourArray(emptyArray, iconArray) : createSixbySixArray(iconArray);
+        setMemoryPiecesList(finalArray)
       } else {
-        let count = 0;
         const gridSize = selectedSettings.grid === "4x4" ? 8 : 18
-        const numberArray = Array.from( {length: gridSize} , 
-          (item) => {if(count < gridSize) {count += 1;} return item = count;})
-          // double each item in the array
-          .flatMap(item => [item, item])
-          // randomize each location of the item in the array
-          .sort((a, b) => 0.5 - Math.random())
-          // add active and isClicked to keep track of user interactions
-          .map(number => {return {memoryPiece: number, active: false, isClicked: false}})
-        setMemoryPiecesList(numberArray)
+        setMemoryPiecesList(createNumberArray(gridSize))
       }
     }, [selectedSettings.grid, selectedSettings.theme])
-
-    const handleClickOnPiece = (id: number) => {
-      const numberOfClickedPieces = memoryPiecesList.filter(piece => piece.isClicked).length;
-      const updatedMemoryArray = memoryPiecesList.map((piece, index) => {
-        if(index !== id || numberOfClickedPieces > 1 || piece.active) return piece;
-          
-        return {...piece, isClicked: true}
-      })
-      setMemoryPiecesList(updatedMemoryArray)
-    };
 
     useEffect(() => {
       const numberOfClickedPieces = memoryPiecesList.filter(piece => piece.isClicked).length;
@@ -117,7 +91,6 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
             
             // set the pieces as active and give the player a point
 
-
             return {...piece, isClicked: false, active: true}
           }); 
           setMemoryPiecesList(newArray)
@@ -127,7 +100,6 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
             
             // should switch user here
 
-            
             return {...piece, isClicked: false, active: false}
           }); 
           setMemoryPiecesList(newArray)
@@ -151,24 +123,7 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
       console.log(updatedArray) 
     })
 
-    const changePlayersTurn = (playersList: PlayersType[]) => {
-      const updatedArray = [...playersList];
-      const activePlayerIndex = updatedArray.findIndex(player => player.selected);
-      // starting with removing each players selection
-      updatedArray.forEach((player, index) => {
-        updatedArray[index].selected = false;
-      });
-      console.log(activePlayerIndex, playersList.length)
-      if(activePlayerIndex > playersList.length) {
-        updatedArray[0].selected = true;
-      } else {
-        if(updatedArray[activePlayerIndex + 1]) {
-          updatedArray[activePlayerIndex + 1].selected = true;
-        }
-      }
-      console.log(updatedArray)
-    }
-
+    
     useEffect(() => {
 
     }, [playersList])
@@ -190,7 +145,35 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
       }); 
       setSelectedSettings(updatedSettings)
     }, [startMenuSettings]);
-  
+
+    const handleClickOnPiece = (id: number) => {
+      const numberOfClickedPieces = memoryPiecesList.filter(piece => piece.isClicked).length;
+      const updatedMemoryArray = memoryPiecesList.map((piece, index) => {
+        if(index !== id || numberOfClickedPieces > 1 || piece.active) return piece;
+          
+        return {...piece, isClicked: true}
+      })
+      setMemoryPiecesList(updatedMemoryArray)
+    };
+
+    const changePlayersTurn = (playersList: PlayersType[]) => {
+      const updatedArray = [...playersList];
+      const activePlayerIndex = updatedArray.findIndex(player => player.selected);
+      // starting with removing each players selection
+      updatedArray.forEach((player, index) => {
+        updatedArray[index].selected = false;
+      });
+      console.log(activePlayerIndex, playersList.length)
+      if(activePlayerIndex > playersList.length) {
+        updatedArray[0].selected = true;
+      } else {
+        if(updatedArray[activePlayerIndex + 1]) {
+          updatedArray[activePlayerIndex + 1].selected = true;
+        }
+      }
+      console.log(updatedArray)
+    }
+
     const handleClickOnStartMenuButtons = (buttonLabel: string, panelId: number) => {
         const updatedStartMenuSettings = startMenuSettings.map(panel => {
             if(panel.id !== panelId) return panel;
