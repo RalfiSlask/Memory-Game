@@ -27,7 +27,7 @@ const MemoryPiece: React.FC<MemoryPiecePropsType> = ( {index, dimensions, memory
 
     return (
         <div onClick={() => {handleClickOnPiece(index)}} className={`${dimensions} ${memoryPieceBackgroundColor} cursor-pointer flex justify-center items-center`}>
-            { memoryPiece.isClicked || memoryPiece.active &&
+            { (memoryPiece.isClicked || memoryPiece.active) &&
             <MemoryItem 
                 memoryPiece={memoryPiece} 
                 pieceLarge={pieceLarge} 

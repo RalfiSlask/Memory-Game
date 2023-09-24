@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useState, useEffect} from "react";
-import { SelectedSettingsType, StartMenuSettingsType, MemoryPieceType } from "../types/types";
+import { SelectedSettingsType, StartMenuSettingsType, MemoryPieceType, PlayersType } from "../types/types";
 import { getRandomArrayFromIconArray, getDoubledAndShuffledArray } from "../utils/HelperFuntioncs";
 
 const Context = createContext<ContextValueTypes | undefined>(undefined);
@@ -8,6 +8,7 @@ type ContextValueTypes = {
     startMenuSettings: StartMenuSettingsType[];
     selectedSettings: SelectedSettingsType;
     memoryPiecesList: MemoryPieceType[];
+    playersList: PlayersType[];
     handleClickOnStartMenuButtons: (buttonLabel: string, panelId: number) => void;
     handleClickOnPiece: (id: number) => void;
 };
@@ -17,8 +18,6 @@ type ContextType = {
 };
 
 export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
-  const [countdown, setCountdown] = useState("1:59");
-  const [moves, setMoves] = useState("0");
   const [startMenuSettings, setStartMenuSettings] = useState([
         {
           id: 1,
@@ -47,10 +46,20 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
           ]
         },  
       ]);
+    const [countdown, setCountdown] = useState("1:59");
+    const [moves, setMoves] = useState("0");
     const [selectedSettings, setSelectedSettings] = useState<SelectedSettingsType>({theme: "Numbers", playerNumbers: 1, grid: "4x4"});
+    const [playersList, setPlayersList] = useState<PlayersType[]>([]);
+    const [memoryPiecesList, setMemoryPiecesList] = useState<MemoryPieceType[]>([])
 
     const iconArray = ["anchor.svg", "car.svg", "chemistry.svg", "chinese.svg", "hand.svg", "moon.svg", "snow.svg", "soccer.svg", "sun.svg", "flower.svg", "horse.svg", "key.svg", "rectangle.svg", "rhombus.svg", "star.svg", "triangle.svg", "circle.svg", "leaf.svg"];
-    const [memoryPiecesList, setMemoryPiecesList] = useState<MemoryPieceType[]>([])
+
+    useEffect(() => {
+      // setting array length according to number of players selected, and then using the map method to set the player numbers 
+      const playerArray = Array.from( {length: selectedSettings.playerNumbers}, (item, index) => item = {player: index + 1, score: 0, selected: false});
+      playerArray[0].selected = true;
+      setPlayersList(playerArray)
+    }, [selectedSettings.playerNumbers])
 
     useEffect(() => {
       if(selectedSettings.theme === "Icons") {
@@ -81,49 +90,88 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
     }, [selectedSettings.grid, selectedSettings.theme])
 
     const handleClickOnPiece = (id: number) => {
-      
+      const numberOfClickedPieces = memoryPiecesList.filter(piece => piece.isClicked).length;
       const updatedMemoryArray = memoryPiecesList.map((piece, index) => {
-        if(index !== id) return piece;
-        
+        if(index !== id || numberOfClickedPieces > 1 || piece.active) return piece;
+          
         return {...piece, isClicked: true}
       })
-
       setMemoryPiecesList(updatedMemoryArray)
-    }
+    };
 
     useEffect(() => {
-      const filterByClicksList = memoryPiecesList.filter(piece => piece.isClicked)
-      const numberOfClickedPieces = filterByClicksList.length;
+      const numberOfClickedPieces = memoryPiecesList.filter(piece => piece.isClicked).length;
+      let clickedPiecesArray: any[] = [];
+      // if two items have been clicked
       if(numberOfClickedPieces > 1) {
-        let array: any[] = [];
         const updatedArray = [...memoryPiecesList];
-        
-        updatedArray.forEach((piece, index) => {
+        updatedArray.forEach(piece => {
           if(piece.isClicked) {
-            console.log(piece.memoryPiece)
-            array.push(piece.memoryPiece)
+            clickedPiecesArray.push(piece.memoryPiece)
           } 
         })
-        if(array[0] === array[1]) {
-          const newArray = updatedArray.map((piece, index) => {
-            if(piece.isClicked) {
-              return {...piece, isClicked: false, active: true}
-            } else {
-              return piece
-            }
-          }) 
-          console.log(newArray)
+        // if the two pieces clicked are the same
+        if(clickedPiecesArray.every(piece => piece === clickedPiecesArray[0])) {
+          const newArray = updatedArray.map(piece => {
+            if(!piece.isClicked) return piece;
+            
+            // set the pieces as active and give the player a point
+
+
+            return {...piece, isClicked: false, active: true}
+          }); 
+          setMemoryPiecesList(newArray)
+        } else {
+          const newArray = updatedArray.map(piece => {
+            if(!piece.isClicked) return piece;
+            
+            // should switch user here
+
+            
+            return {...piece, isClicked: false, active: false}
+          }); 
+          setMemoryPiecesList(newArray)
         }
-      
-        console.log(updatedArray)
-      }
-
-
+      } 
     }, [memoryPiecesList])
 
     useEffect(() => {
-      console.log(memoryPiecesList)
+      const updatedArray = [...playersList]
+      const findIndex = updatedArray.findIndex(player => player.selected)
+      updatedArray.forEach((obj, index) => {
+        updatedArray[index].selected = false;
+      })
+      if(findIndex > playersList.length) {
+        updatedArray[0].selected = true;
+      } else {
+        if(updatedArray[findIndex + 1]) {
+          updatedArray[findIndex + 1].selected = true;
+        }
+      }
+      console.log(updatedArray) 
     })
+
+    const changePlayersTurn = (playersList: PlayersType[]) => {
+      const updatedArray = [...playersList];
+      const activePlayerIndex = updatedArray.findIndex(player => player.selected);
+      // starting with removing each players selection
+      updatedArray.forEach((player, index) => {
+        updatedArray[index].selected = false;
+      });
+      console.log(activePlayerIndex, playersList.length)
+      if(activePlayerIndex > playersList.length) {
+        updatedArray[0].selected = true;
+      } else {
+        if(updatedArray[activePlayerIndex + 1]) {
+          updatedArray[activePlayerIndex + 1].selected = true;
+        }
+      }
+      console.log(updatedArray)
+    }
+
+    useEffect(() => {
+
+    }, [playersList])
     
     useEffect(() => {
       let updatedSettings = {...selectedSettings}
@@ -163,6 +211,7 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
         startMenuSettings: startMenuSettings,
         selectedSettings: selectedSettings,
         memoryPiecesList: memoryPiecesList,
+        playersList: playersList,
         handleClickOnStartMenuButtons: handleClickOnStartMenuButtons,
         handleClickOnPiece: handleClickOnPiece,
     };

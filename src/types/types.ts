@@ -29,3 +29,9 @@ export type MemoryPieceType = {
     active: boolean;
     isClicked: boolean;
 };
+
+export type PlayersType = {
+    player: number;
+    score: number;
+    selected: boolean;
+};
