@@ -24,14 +24,8 @@ export type SelectedSettingsType = {
     grid: string;
 };
 
-export type NumbersListType = {
-    number: number;
+export type MemoryPieceType = {
+    memoryPiece: string | number;
     active: boolean;
     isClicked: boolean;
-  };
-  
-  export type IconsListType = {
-    icon: string;
-    active: boolean;
-    isClicked: boolean;
-  };
+};

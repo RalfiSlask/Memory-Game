@@ -1,38 +1,36 @@
-import MemoryNumber from "./MemoryNumber";
-import MemoryIcon from "./MemoryIcon";
-import { useState, useContext } from "react";
-import { IconsListType, NumbersListType } from "../../types/types";
+import { useState, useContext, useEffect } from "react";
+import { MemoryPieceType } from "../../types/types";
 import Context from "../../context/Context";
+import MemoryItem from "./MemoryItem";
 
 type MemoryPiecePropsType = {
     index: number;
     dimensions: string;
-    number: NumbersListType;
-    icon: IconsListType;
+    memoryPiece: MemoryPieceType;
     pieceLarge: boolean;
 };
 
-const MemoryPiece: React.FC<MemoryPiecePropsType> = ( {index, dimensions, number, icon, pieceLarge} ) => {
+const MemoryPiece: React.FC<MemoryPiecePropsType> = ( {index, dimensions, memoryPiece, pieceLarge} ) => {
     const context = useContext(Context);
   
     if(!context) {
         throw new Error("Does not exist in contextProvider")
     };
 
-    const { selectedSettings } = context;
-  
-    const [isClicked, SetIsClicked] = useState(false);
+    if(!memoryPiece) {
+        return null;
+    };
+
+    const { handleClickOnPiece } = context;
+
+    const memoryPieceBackgroundColor = memoryPiece.isClicked ? "bg-[#FDA214]" : memoryPiece.active ? "bg-[#BCCED9]" : "bg-[#304859] hover:bg-[#6395B8]";
 
     return (
-        <div className={`${dimensions} bg-[#304859] hover:bg-[#6395B8] cursor-pointer flex justify-center items-center`}>
-            {selectedSettings.theme === "Numbers" ? 
-            <MemoryNumber 
+        <div onClick={() => {handleClickOnPiece(index)}} className={`${dimensions} ${memoryPieceBackgroundColor} cursor-pointer flex justify-center items-center`}>
+            { memoryPiece.isClicked || memoryPiece.active &&
+            <MemoryItem 
+                memoryPiece={memoryPiece} 
                 pieceLarge={pieceLarge} 
-                number={number}
-            /> : 
-            <MemoryIcon 
-                pieceLarge={pieceLarge} 
-                icon={icon}
             />
             }
         </div>
