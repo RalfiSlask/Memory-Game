@@ -1,4 +1,9 @@
+import { NavigateFunction } from "react-router-dom";
 import { MemoryPieceType } from "../types/types";
+
+export const navigateToMainMenu = (navigate: NavigateFunction) => {
+  navigate("/")
+};
 
 export const getRandomArrayFromIconArray = (iconArray: string[], length: number, array: string[]) => {
     // keeping track of used Indices in an array

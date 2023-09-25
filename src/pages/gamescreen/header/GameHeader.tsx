@@ -2,16 +2,25 @@ import HeaderButton from "./HeaderButton"
 import UIContext from "../../../context/UIContext"
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom"; 
+import { navigateToMainMenu } from "../../../utils/HelperFuntioncs";
+import Context from "../../../context/Context";
 
 const GameHeader = () => {
     const uiContext = useContext(UIContext);
+    const context = useContext(Context)
     
-    if(!uiContext) {
+    if(!uiContext || !context) {
         throw new Error("Does not exist in contextProvider")
     }
+    
+    const { screenSize, openMenuModal } = uiContext; 
+    const { restartGame } = context;
+    const navigate = useNavigate();
 
-    const { screenSize, openMenuModal } = uiContext;
-
+    const handleClickOnNewGame = () => {
+        navigateToMainMenu(navigate)
+    };
+    
   return (
     <header className="w-full">
         <div className="flex justify-between items-center">
@@ -30,12 +39,14 @@ const GameHeader = () => {
                        text="Restart" 
                        width="w-[127px]" 
                        color="FDA214"
+                       onClick={restartGame}
                     />
                     <HeaderButton 
                        text="New Game" 
                        width="w-[149px]" 
                        color="#DFE7EC"
                        textColor="#304859"
+                       onClick={handleClickOnNewGame}
                     />
                 </>}
             </div>

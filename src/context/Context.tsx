@@ -17,6 +17,7 @@ type ContextValueTypes = {
     playersList: PlayersType[];
     handleClickOnStartMenuButtons: (buttonLabel: string, panelId: number) => void;
     handleClickOnPiece: (id: number) => void;
+    restartGame: () => void;
 };
 
 type ContextType = {
@@ -154,7 +155,14 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
           setMemoryPiecesList(getListBackWithUntouchedPieces(piecesList)) 
         }
       } 
-    }, [memoryPiecesList, playersList])
+    }, [memoryPiecesList, playersList]);
+
+    const restartGame = () => {
+      const emptyMemoryPiecesList = memoryPiecesList.map(piece => {
+        return {...piece, isClicked: false, taken: false}
+      })
+      setMemoryPiecesList(emptyMemoryPiecesList);
+    };
 
     useEffect(() => {
       let updatedSettings = {...selectedSettings}
@@ -193,6 +201,7 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
         playersList: playersList,
         handleClickOnStartMenuButtons: handleClickOnStartMenuButtons,
         handleClickOnPiece: handleClickOnPiece,
+        restartGame: restartGame,
     };
 
     return (
