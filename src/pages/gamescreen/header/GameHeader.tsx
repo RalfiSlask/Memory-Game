@@ -2,7 +2,6 @@ import HeaderButton from "./HeaderButton"
 import UIContext from "../../../context/UIContext"
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom"; 
-import { navigateToMainMenu } from "../../../utils/HelperFuntioncs";
 import Context from "../../../context/Context";
 
 const GameHeader = () => {
@@ -14,7 +13,7 @@ const GameHeader = () => {
     }
     
     const { screenSize, openMenuModal } = uiContext; 
-    const { restartGame } = context;
+    const { restartGame, navigateToMainMenu } = context;
     const navigate = useNavigate();
 
     const handleClickOnNewGame = () => {

@@ -6,7 +6,11 @@ import {
     createFourByFourArray, 
     areTwoPiecesClicked, 
     getListBackWithUntouchedPieces,
-    getListBackWithActivePieces, } from "../utils/HelperFuntioncs";
+    getListBackWithActivePieces,
+    getResetMemoryList,
+    getResetPlayersList, } from "../utils/HelperFuntioncs";
+import { NavigateFunction } from "react-router-dom";
+import menuSettingsData from "../data/menuSettingsData.json";
 
 const Context = createContext<ContextValueTypes | undefined>(undefined);
 
@@ -18,6 +22,7 @@ type ContextValueTypes = {
     handleClickOnStartMenuButtons: (buttonLabel: string, panelId: number) => void;
     handleClickOnPiece: (id: number) => void;
     restartGame: () => void;
+    navigateToMainMenu: (navigate: NavigateFunction) => void;
 };
 
 type ContextType = {
@@ -29,34 +34,7 @@ const initialStoredPlayers = localStorage.getItem("players");
 const initialStoredMenuSettings = localStorage.getItem("menuSettings");
 
 export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
-  const [startMenuSettings, setStartMenuSettings] = useState<StartMenuSettingsType[]>(initialStoredMenuSettings ? JSON.parse(initialStoredMenuSettings) : [
-        {
-          id: 1,
-          title: "Select Theme",
-          buttons: [
-            { type: "large", label: "Numbers", selected: true},
-            { type: "large", label: "Icons", selected: false},
-          ]
-        },
-        {
-          id: 2,
-          title: "Number of Players",
-          buttons: [
-            { type: "small", label: "1", selected: true},
-            { type: "small", label: "2", selected: false},
-            { type: "small", label: "3", selected: false},
-            { type: "small", label: "4", selected: false},
-          ]
-        },  
-        {
-          id: 3,
-          title: "Grid Size",
-          buttons: [
-            { type: "large", label: "4x4", selected: true},
-            { type: "large", label: "6x6", selected: false},
-          ]
-        },  
-      ]);
+    const [startMenuSettings, setStartMenuSettings] = useState<StartMenuSettingsType[]>(initialStoredMenuSettings ? JSON.parse(initialStoredMenuSettings) : menuSettingsData);
     const [countdown, setCountdown] = useState("1:59");
     const [moves, setMoves] = useState("0");
     const [selectedSettings, setSelectedSettings] = useState<SelectedSettingsType>(initialStoredSettings ? JSON.parse(initialStoredSettings) : {theme: "Numbers", playerNumbers: 1, grid: "4x4"});
@@ -64,6 +42,8 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
     const [memoryPiecesList, setMemoryPiecesList] = useState<MemoryPieceType[]>([])
 
     const iconArray = ["anchor.svg", "car.svg", "chemistry.svg", "chinese.svg", "hand.svg", "moon.svg", "snow.svg", "soccer.svg", "sun.svg", "flower.svg", "horse.svg", "key.svg", "rectangle.svg", "rhombus.svg", "star.svg", "triangle.svg", "circle.svg", "leaf.svg"];
+    const errorSound = new Audio("/error.wav")
+    const winningSound = new Audio("/win.mp3")
 
     const handleClickOnPiece = (id: number) => {
       const numberOfClickedPieces = memoryPiecesList.filter(piece => piece.isClicked).length;
@@ -90,6 +70,7 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
         })
         setStartMenuSettings(updatedStartMenuSettings)
     };  
+    
 
     const updatePlayersTurn = (playersList: PlayersType[]) => {
       const updatedPlayersList = [...playersList];
@@ -119,7 +100,7 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
       const playerArray = Array.from( {length: selectedSettings.playerNumbers}, (item, index) => item = {player: index + 1, score: 0, selected: false});
       playerArray[0].selected = true;
       setPlayersList(playerArray)
-    }, [selectedSettings.playerNumbers])
+    }, [selectedSettings.playerNumbers]);
 
     useEffect(() => {
       // updating memory pieces depnding on theme and gridsize
@@ -132,7 +113,7 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
         setMemoryPiecesList(createNumberArray(gridSize))
       }
     }, [selectedSettings.grid, selectedSettings.theme])
- 
+
     useEffect(() => {
       // array to keep track of clicked pieces
       let clickedPiecesArray: any[] = [];
@@ -147,9 +128,11 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
         // if the two pieces clicked are the same
         if(clickedPiecesArray.every(piece => piece === clickedPiecesArray[0])) {
           // update the playerscore and set the pieces as taken
+          winningSound.play();
           updatePlayersScore(playersList)
           setMemoryPiecesList(getListBackWithActivePieces(piecesList)) 
         } else {
+          errorSound.play();
           // update players turn and reset clicked pieces to untouched state
           updatePlayersTurn(playersList)
           setMemoryPiecesList(getListBackWithUntouchedPieces(piecesList)) 
@@ -158,10 +141,12 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
     }, [memoryPiecesList, playersList]);
 
     const restartGame = () => {
-      const emptyMemoryPiecesList = memoryPiecesList.map(piece => {
-        return {...piece, isClicked: false, taken: false}
-      })
-      setMemoryPiecesList(emptyMemoryPiecesList);
+      setMemoryPiecesList(getResetMemoryList(memoryPiecesList))
+      setPlayersList(getResetPlayersList(playersList)) 
+    };
+
+    const navigateToMainMenu = (navigate: NavigateFunction) => {
+      navigate("/")
     };
 
     useEffect(() => {
@@ -202,6 +187,7 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
         handleClickOnStartMenuButtons: handleClickOnStartMenuButtons,
         handleClickOnPiece: handleClickOnPiece,
         restartGame: restartGame,
+        navigateToMainMenu: navigateToMainMenu,
     };
 
     return (

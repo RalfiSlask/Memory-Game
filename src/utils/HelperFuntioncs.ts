@@ -1,9 +1,4 @@
-import { NavigateFunction } from "react-router-dom";
-import { MemoryPieceType } from "../types/types";
-
-export const navigateToMainMenu = (navigate: NavigateFunction) => {
-  navigate("/")
-};
+import { MemoryPieceType, PlayersType } from "../types/types";
 
 export const getRandomArrayFromIconArray = (iconArray: string[], length: number, array: string[]) => {
     // keeping track of used Indices in an array
@@ -22,6 +17,18 @@ export const getRandomArrayFromIconArray = (iconArray: string[], length: number,
 
 export const getDoubledAndShuffledArray = (array: string[]) => {
     return array.flatMap(item => [item, item]).sort((a, b) => 0.5 - Math.random())
+};
+
+export const getResetMemoryList = (piecesList: MemoryPieceType[]) => {
+  return piecesList.map(piece => ({...piece, isClicked: false, taken: false}));
+};
+
+export const getResetPlayersList = (playersList: PlayersType[]) => {
+  return playersList.map(player => {
+    if(player === playersList[0]) return {...player, score: 0, selected: true}
+
+    return {...player, score: 0, selected: false}
+  })
 };
 
 export const createNumberArray = (gridSize: number) => {

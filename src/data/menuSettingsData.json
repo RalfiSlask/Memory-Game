@@ -1,0 +1,31 @@
+[
+    {
+        "id":1,
+        "title":"Select Theme",
+        "buttons":
+            [
+                {"type":"large","label":"Numbers","selected":true},
+                {"type":"large","label":"Icons","selected":false}
+            ]
+    },
+    {
+        "id":2,
+        "title":"Number of Players",
+        "buttons":
+            [
+                {"type":"small","label":"1","selected":true},
+                {"type":"small","label":"2","selected":false},
+                {"type":"small","label":"3","selected":false},
+                {"type":"small","label":"4","selected":false}
+            ]
+    },
+    {
+        "id":3,
+        "title":"Grid Size",
+        "buttons":
+            [
+                {"type":"large","label":"4x4","selected":true},
+                {"type":"large","label":"6x6","selected":false}
+            ]
+    }
+]

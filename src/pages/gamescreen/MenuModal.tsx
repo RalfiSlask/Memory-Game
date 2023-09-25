@@ -1,17 +1,19 @@
 import LargeButton from "../startscreen/ui/LargeButton";
 import UIContext from "../../context/UIContext"
 import { useContext } from "react";
-import { navigateToMainMenu } from "../../utils/HelperFuntioncs";
 import { useNavigate } from "react-router-dom";
+import Context from "../../context/Context";
 
 const MenuModal = () => {
     const uiContext = useContext(UIContext);
+    const context = useContext(Context)
 
-    if(!uiContext) {
+    if(!uiContext || !context) {
         throw new Error("Does not exist in contextProvider")
     }
 
     const { closeMenuModal } = uiContext;
+    const { navigateToMainMenu } = context;
     const navigate = useNavigate();
 
     const handleClickOnResume = () => {
