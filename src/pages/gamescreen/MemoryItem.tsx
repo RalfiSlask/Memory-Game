@@ -1,5 +1,4 @@
 import { MemoryPieceType } from "../../types/types";
-import { useEffect } from "react";
 
 type MemoryNumberPropsType = {
     pieceLarge: boolean;
@@ -7,10 +6,6 @@ type MemoryNumberPropsType = {
 };
 
 const MemoryItem: React.FC<MemoryNumberPropsType> = ( {pieceLarge, memoryPiece} ) => {
-
-    useEffect(() => {
-        console.log(typeof memoryPiece.memoryPiece)
-    })
 
     return (
         <>

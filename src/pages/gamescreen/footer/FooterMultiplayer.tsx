@@ -1,5 +1,5 @@
 
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import Context from "../../../context/Context";
 import MultiplayerContainer from "./MultiplayerContainer";
 import UIContext from "../../../context/UIContext";

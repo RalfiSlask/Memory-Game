@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useContext } from "react";
 import { MemoryPieceType } from "../../types/types";
 import Context from "../../context/Context";
 import MemoryItem from "./MemoryItem";
@@ -23,11 +23,14 @@ const MemoryPiece: React.FC<MemoryPiecePropsType> = ( {index, dimensions, memory
 
     const { handleClickOnPiece } = context;
 
-    const memoryPieceBackgroundColor = memoryPiece.isClicked ? "bg-[#FDA214]" : memoryPiece.active ? "bg-[#BCCED9]" : "bg-[#304859] hover:bg-[#6395B8]";
+    const memoryPieceRightAnimation = memoryPiece.taken && !memoryPiece.isClicked ? "animate-green-flash" : "";
+    const memoryPieceWrongAnimation = !memoryPiece.taken && !memoryPiece.isClicked ? "animate-red-flash" : "";
+
+    const memoryPieceBackgroundColor = memoryPiece.isClicked ? "bg-[#FDA214]" : memoryPiece.taken ? "bg-[#BCCED9]" : "bg-[#304859] hover:bg-[#6395B8]";
 
     return (
-        <div onClick={() => {handleClickOnPiece(index)}} className={`${dimensions} ${memoryPieceBackgroundColor} cursor-pointer flex justify-center items-center`}>
-            { (memoryPiece.isClicked || memoryPiece.active) &&
+        <div onClick={() => {handleClickOnPiece(index)}} className={`${dimensions} ${memoryPieceBackgroundColor} ${memoryPieceRightAnimation} cursor-pointer flex justify-center items-center`}>
+            { (memoryPiece.isClicked || memoryPiece.taken) &&
             <MemoryItem 
                 memoryPiece={memoryPiece} 
                 pieceLarge={pieceLarge} 

@@ -1,10 +1,11 @@
 import HeaderButton from "./HeaderButton"
 import UIContext from "../../../context/UIContext"
 import { useContext } from "react";
+import { useNavigate } from "react-router-dom"; 
 
 const GameHeader = () => {
     const uiContext = useContext(UIContext);
-
+    
     if(!uiContext) {
         throw new Error("Does not exist in contextProvider")
     }

@@ -5,6 +5,22 @@ module.exports = {
   ],
   theme: {
     extend: {
+      keyframes: {
+        'green-flash': {
+          '0%': { backgroundColor: '#FDA214' }, 
+          '33%': { backgroundColor: '#32CD32' },    // green color
+          '100%': { backgroundColor: '#BCCED9' },  // End with the taken color
+        },
+        'red-flash': {
+          '0%': { backgroundColor: '#FDA214' }, 
+          '33%': { backgroundColor: 'red' },    // red color
+          '100%': { backgroundColor: '#304859' },  // End with original color
+        },
+      },
+      animation: {
+        "green-flash": "green-flash 0.5s forwards",
+        "red-flash": "red-flash 0.5s forwards",
+      }
     },
   },
   plugins: [],

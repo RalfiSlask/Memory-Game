@@ -26,7 +26,7 @@ export type SelectedSettingsType = {
 
 export type MemoryPieceType = {
     memoryPiece: string | number;
-    active: boolean;
+    taken: boolean;
     isClicked: boolean;
 };
 

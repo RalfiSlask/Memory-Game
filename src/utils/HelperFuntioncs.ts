@@ -1,3 +1,5 @@
+import { MemoryPieceType } from "../types/types";
+
 export const getRandomArrayFromIconArray = (iconArray: string[], length: number, array: string[]) => {
     // keeping track of used Indices in an array
     const usedIndices: number[] = [];
@@ -25,8 +27,8 @@ export const createNumberArray = (gridSize: number) => {
     .flatMap(item => [item, item])
     // randomize each location of the item in the array
     .sort((a, b) => 0.5 - Math.random())
-    // add active and isClicked to keep track of user interactions
-    .map(number => {return {memoryPiece: number, active: false, isClicked: false}})
+    // add taken and isClicked to keep track of user interactions
+    .map(number => {return {memoryPiece: number, taken: false, isClicked: false}})
 };
 
 export const createFourByFourArray = (originalArray: any[], iconArray: any[]) => {
@@ -34,11 +36,25 @@ export const createFourByFourArray = (originalArray: any[], iconArray: any[]) =>
   const randomArray = getRandomArrayFromIconArray(iconArray, 8, originalArray);
         // double each item in the array and then shuffle the order
   const fourByfourRandomArray = getDoubledAndShuffledArray(randomArray);
-   // add active and isClicked to each item to keep track of user interactions
-  return fourByfourRandomArray.map(icon => ( {memoryPiece: icon, active: false, isClicked: false}));
+   // add taken and isClicked to each item to keep track of user interactions
+  return fourByfourRandomArray.map(icon => ( {memoryPiece: icon, taken: false, isClicked: false}));
 };
 
 export const createSixbySixArray = (iconArray: any[]) => {
   const sixBysixRandomArray = getDoubledAndShuffledArray(iconArray);
-  return sixBysixRandomArray.map(icon => ( {memoryPiece: icon, active: false, isClicked: false}))
+  return sixBysixRandomArray.map(icon => ( {memoryPiece: icon, taken: false, isClicked: false}))
+};
+
+export const areTwoPiecesClicked = (piecesList: MemoryPieceType[]) => {
+  return piecesList.filter(piece => piece.isClicked).length === 2
+};
+
+export const getListBackWithUntouchedPieces = (piecesList: MemoryPieceType[]) => {
+  return piecesList.map(piece => piece.isClicked ? {...piece, isClicked: false, taken: false} : piece); 
+};
+
+export const getListBackWithActivePieces = (piecesList: MemoryPieceType[]) => {
+  return piecesList.map(piece => (
+    piece.isClicked ? {...piece, isClicked: false, taken: true} : piece
+  ))
 };
