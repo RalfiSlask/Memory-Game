@@ -3,13 +3,14 @@ import { createContext, ReactNode, useState, useEffect } from "react";
 type ModalsType = {
     lightbox: boolean;
     menu: boolean;
+    multiplayer: boolean;
 };
 
 type UIContextValueTypes = {
     screenSize: string;
     modals: ModalsType;
     openMenuModal: () => void;
-    closeMenuModal: () => void;
+    closeModal: (modal: keyof ModalsType) => void;
 };
 
 type UIContextType = {
@@ -21,14 +22,14 @@ const UIContext = createContext<UIContextValueTypes | undefined>(undefined);
 export const UIContextProvider: React.FC<UIContextType> = ( {children} ) => {
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     const [screenSize, setScreenSize] = useState("");
-    const [modals, setModals] = useState({lightbox: false, menu: false})
+    const [modals, setModals] = useState({lightbox: false, menu: false, multiplayer: false})
 
     const openMenuModal = () => {
         setModals(prev => ({...prev, lightbox: true, menu: true}))
     };
 
-    const closeMenuModal = () => {
-        setModals(prev => ({...prev, lightbox: false, menu: false}))
+    const closeModal = (modal: keyof ModalsType) => {
+        setModals(prev => ({...prev, lightbox: false, [modal]: false}))
     };
 
     useEffect(() => {
@@ -47,7 +48,7 @@ export const UIContextProvider: React.FC<UIContextType> = ( {children} ) => {
         if(screenWidth < 768) {
             setScreenSize("small")
         } else if(screenWidth < 1280) {
-            closeMenuModal();
+            closeModal("menu");
             setScreenSize("large")
         }
     }, [screenWidth]);
@@ -56,7 +57,7 @@ export const UIContextProvider: React.FC<UIContextType> = ( {children} ) => {
         screenSize: screenSize,
         modals: modals,
         openMenuModal: openMenuModal,
-        closeMenuModal: closeMenuModal,
+        closeModal: closeModal,
     };
 
     return (

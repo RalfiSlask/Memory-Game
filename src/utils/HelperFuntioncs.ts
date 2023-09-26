@@ -25,9 +25,9 @@ export const getResetMemoryList = (piecesList: MemoryPieceType[]) => {
 
 export const getResetPlayersList = (playersList: PlayersType[]) => {
   return playersList.map(player => {
-    if(player === playersList[0]) return {...player, score: 0, selected: true}
+    if(player === playersList[0]) return {...player, score: 0, selected: true, winner: false}
 
-    return {...player, score: 0, selected: false}
+    return {...player, score: 0, selected: false, winner: false}
   })
 };
 

@@ -12,16 +12,22 @@ const MenuModal = () => {
         throw new Error("Does not exist in contextProvider")
     }
 
-    const { closeMenuModal } = uiContext;
-    const { navigateToMainMenu } = context;
+    const { closeModal } = uiContext;
+    const { navigateToMainMenu, restartGame } = context;
     const navigate = useNavigate();
 
+    const handleClickOnRestart = () => {
+        closeModal("menu");
+        restartGame();
+    };
+
     const handleClickOnResume = () => {
-        closeMenuModal();
+        closeModal("menu");
     };
 
     const handleClickOnNewGame = () => {
         navigateToMainMenu(navigate)
+        closeModal("menu");
     };
 
   return (
@@ -29,6 +35,7 @@ const MenuModal = () => {
         <LargeButton 
             text="Restart" 
             color="#FDA214"
+            onClick={handleClickOnRestart}
         />
         <LargeButton 
             text="New Game" 

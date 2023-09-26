@@ -34,4 +34,5 @@ export type PlayersType = {
     player: number;
     score: number;
     selected: boolean;
+    winner?: boolean;
 };

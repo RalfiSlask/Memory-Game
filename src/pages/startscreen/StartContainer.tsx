@@ -38,7 +38,11 @@ const StartContainer = () => {
             )
         })}
       </div>
-        <LargeButton text="Start Game" color="#FFB84A" onClick={handleClickOnStartGame}/>
+        <LargeButton 
+          text="Start Game" 
+          color="#FFB84A" 
+          onClick={handleClickOnStartGame}
+        />
      </div>
   )
 }

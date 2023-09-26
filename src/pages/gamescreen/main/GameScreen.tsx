@@ -7,6 +7,7 @@ import FooterSolo from "../footer/FooterSolo";
 import FooterMultiplayer from "../footer/FooterMultiplayer";
 import Context from "../../../context/Context";
 import MemoryContainer from "../MemoryContainer";
+import WinningModal from "../WinningModal";
 
 
 const GameScreen = () => {
@@ -18,9 +19,12 @@ const GameScreen = () => {
     }
 
     const { modals } = uiContext;
-    const { selectedSettings } = context;
+    const { selectedSettings, memoryPiecesList } = context;
 
-  return (
+    const everyPieceTaken =  memoryPiecesList.every(piece => piece.taken);
+    const isMultiPlayer = selectedSettings.playerNumbers > 1;
+
+    return (
     <div className="flex flex-col items-center">
         <div className="w-[327px] md:w-[689px] xl:w-[1110px] mt-6 md:mt-[37px] xl:mt-[67px] flex flex-col items-center">
             <GameHeader />
@@ -33,7 +37,7 @@ const GameScreen = () => {
         </div>
         {modals.menu && <MenuModal />}
         {modals.lightbox && <Lightbox />}
-   
+        {isMultiPlayer && everyPieceTaken ? <WinningModal /> : null}
     </div>
   )
 }

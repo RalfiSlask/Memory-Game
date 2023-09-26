@@ -32,6 +32,7 @@ type ContextType = {
 const initialStoredSettings = localStorage.getItem("settings");
 const initialStoredPlayers = localStorage.getItem("players");
 const initialStoredMenuSettings = localStorage.getItem("menuSettings");
+const initialStoredMemoryPieces = localStorage.getItem("memoryPieces");
 
 export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
     const [startMenuSettings, setStartMenuSettings] = useState<StartMenuSettingsType[]>(initialStoredMenuSettings ? JSON.parse(initialStoredMenuSettings) : menuSettingsData);
@@ -39,10 +40,9 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
     const [moves, setMoves] = useState("0");
     const [selectedSettings, setSelectedSettings] = useState<SelectedSettingsType>(initialStoredSettings ? JSON.parse(initialStoredSettings) : {theme: "Numbers", playerNumbers: 1, grid: "4x4"});
     const [playersList, setPlayersList] = useState<PlayersType[]>(initialStoredPlayers ? JSON.parse(initialStoredPlayers) : []);
-    const [memoryPiecesList, setMemoryPiecesList] = useState<MemoryPieceType[]>([])
+    const [memoryPiecesList, setMemoryPiecesList] = useState<MemoryPieceType[]>(initialStoredMemoryPieces ? JSON.parse(initialStoredMemoryPieces) : [])
 
     const iconArray = ["anchor.svg", "car.svg", "chemistry.svg", "chinese.svg", "hand.svg", "moon.svg", "snow.svg", "soccer.svg", "sun.svg", "flower.svg", "horse.svg", "key.svg", "rectangle.svg", "rhombus.svg", "star.svg", "triangle.svg", "circle.svg", "leaf.svg"];
-    const errorSound = new Audio("/error.wav")
     const winningSound = new Audio("/win.mp3")
 
     const handleClickOnPiece = (id: number) => {
@@ -132,7 +132,6 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
           updatePlayersScore(playersList)
           setMemoryPiecesList(getListBackWithActivePieces(piecesList)) 
         } else {
-          errorSound.play();
           // update players turn and reset clicked pieces to untouched state
           updatePlayersTurn(playersList)
           setMemoryPiecesList(getListBackWithUntouchedPieces(piecesList)) 
@@ -140,12 +139,30 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
       } 
     }, [memoryPiecesList, playersList]);
 
+    useEffect(() => {
+      const everyPieceTaken = memoryPiecesList.every(piece => piece.taken)
+      if(everyPieceTaken) {
+        // get the highest score from the players
+        const mostPairs = Math.max.apply(null, playersList.map(player => player.score))
+        const updatedPlayersList = [...playersList]
+        updatedPlayersList.forEach((player, index) => {
+          if(player.score === mostPairs) {
+            updatedPlayersList[index].winner = true;
+          }
+        });
+        setPlayersList(updatedPlayersList)
+      }
+    }, [memoryPiecesList])
+
     const restartGame = () => {
       setMemoryPiecesList(getResetMemoryList(memoryPiecesList))
       setPlayersList(getResetPlayersList(playersList)) 
     };
 
     const navigateToMainMenu = (navigate: NavigateFunction) => {
+      setMemoryPiecesList(getResetMemoryList(memoryPiecesList))
+      setPlayersList(getResetPlayersList(playersList)) 
+      setStartMenuSettings(menuSettingsData)
       navigate("/")
     };
 
@@ -174,6 +191,10 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
     useEffect(() => {
       localStorage.setItem("settings", JSON.stringify(selectedSettings))
     }, [selectedSettings]);
+
+    useEffect(() => {
+      localStorage.setItem("memoryPieces", JSON.stringify(memoryPiecesList))
+    }, [memoryPiecesList]);
 
     useEffect(() => {
       localStorage.setItem("players", JSON.stringify(playersList))
