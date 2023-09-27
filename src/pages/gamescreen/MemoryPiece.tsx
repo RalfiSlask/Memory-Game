@@ -24,8 +24,6 @@ const MemoryPiece: React.FC<MemoryPiecePropsType> = ( {index, dimensions, memory
     const { handleClickOnPiece } = context;
 
     const memoryPieceRightAnimation = memoryPiece.taken && !memoryPiece.isClicked ? "animate-green-flash" : "";
-    const memoryPieceWrongAnimation = !memoryPiece.taken && !memoryPiece.isClicked ? "animate-red-flash" : "";
-
     const memoryPieceBackgroundColor = memoryPiece.isClicked ? "bg-[#FDA214]" : memoryPiece.taken ? "bg-[#BCCED9]" : "bg-[#304859] hover:bg-[#6395B8]";
 
     return (

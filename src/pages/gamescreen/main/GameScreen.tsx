@@ -1,14 +1,13 @@
 import Lightbox from "../../../components/ui/Lightbox";
 import GameHeader from "../header/GameHeader";
 import UIContext from "../../../context/UIContext";
-import { useContext } from "react";
-import MenuModal from "../MenuModal";
+import { useContext, useEffect } from "react";
+import MenuModal from "../modals/MenuModal";
 import FooterSolo from "../footer/FooterSolo";
 import FooterMultiplayer from "../footer/FooterMultiplayer";
 import Context from "../../../context/Context";
 import MemoryContainer from "../MemoryContainer";
-import WinningModal from "../WinningModal";
-
+import WinningModal from "../modals/WinningModal";
 
 const GameScreen = () => {
     const uiContext = useContext(UIContext);
@@ -16,13 +15,18 @@ const GameScreen = () => {
 
     if(!uiContext || !context) {
         throw new Error("Does not exist in contextProvider")
-    }
+    };
 
-    const { modals } = uiContext;
-    const { selectedSettings, memoryPiecesList } = context;
-
+    const { modals, setModals } = uiContext;
+    const { selectedSettings, memoryPiecesList, pauseGame } = context;
     const everyPieceTaken =  memoryPiecesList.every(piece => piece.taken);
-    const isMultiPlayer = selectedSettings.playerNumbers > 1;
+
+    useEffect(() => {
+        if(!everyPieceTaken) return;
+        const updatedModals = {...modals}
+        setModals({...updatedModals, lightbox: true, winner: true})
+        pauseGame();
+    }, [memoryPiecesList]);
 
     return (
     <div className="flex flex-col items-center">
@@ -31,13 +35,13 @@ const GameScreen = () => {
             <main>
                 <MemoryContainer />
             </main>
-            <footer className='flex justify-center'>
+            <footer className='flex justify-center w-[327px] md:w-[540px]'>
                 {selectedSettings.playerNumbers === 1 ? <FooterSolo /> : <FooterMultiplayer />}
             </footer>
         </div>
         {modals.menu && <MenuModal />}
         {modals.lightbox && <Lightbox />}
-        {isMultiPlayer && everyPieceTaken ? <WinningModal /> : null}
+        {modals.winner && <WinningModal /> }
     </div>
   )
 }

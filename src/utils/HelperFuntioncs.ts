@@ -70,3 +70,9 @@ export const getListBackWithActivePieces = (piecesList: MemoryPieceType[]) => {
     piece.isClicked ? {...piece, isClicked: false, taken: true} : piece
   ))
 };
+
+export const displayTime = (seconds: number) => {
+  const minutes = Math.floor(seconds / 60)
+  const remainingSeconds = seconds % 60;
+  return `${String(minutes)}:${String(remainingSeconds).padStart(2, "0")}`
+};

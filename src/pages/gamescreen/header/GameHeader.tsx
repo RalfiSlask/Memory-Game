@@ -12,12 +12,17 @@ const GameHeader = () => {
         throw new Error("Does not exist in contextProvider")
     }
     
-    const { screenSize, openMenuModal } = uiContext; 
-    const { restartGame, navigateToMainMenu } = context;
+    const { screenSize, openModal } = uiContext; 
+    const { restartGame, navigateToMainMenu, pauseGame } = context;
     const navigate = useNavigate();
 
     const handleClickOnNewGame = () => {
         navigateToMainMenu(navigate)
+    };
+
+    const openMenuModal = () => {
+        openModal("menu")
+        pauseGame();
     };
     
   return (

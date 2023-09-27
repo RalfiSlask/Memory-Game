@@ -1,8 +1,8 @@
-import LargeButton from "../startscreen/ui/LargeButton";
-import UIContext from "../../context/UIContext"
+import LargeButton from "../../startscreen/ui/LargeButton";
+import UIContext from "../../../context/UIContext"
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import Context from "../../context/Context";
+import Context from "../../../context/Context";
 
 const MenuModal = () => {
     const uiContext = useContext(UIContext);
@@ -13,7 +13,7 @@ const MenuModal = () => {
     }
 
     const { closeModal } = uiContext;
-    const { navigateToMainMenu, restartGame } = context;
+    const { navigateToMainMenu, restartGame, resumeGame } = context;
     const navigate = useNavigate();
 
     const handleClickOnRestart = () => {
@@ -23,6 +23,7 @@ const MenuModal = () => {
 
     const handleClickOnResume = () => {
         closeModal("menu");
+        resumeGame();
     };
 
     const handleClickOnNewGame = () => {

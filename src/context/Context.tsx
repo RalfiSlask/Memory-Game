@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState, useEffect} from "react";
+import { createContext, ReactNode, useState, useEffect, useRef} from "react";
 import { SelectedSettingsType, StartMenuSettingsType, MemoryPieceType, PlayersType } from "../types/types";
 import { 
     createNumberArray, 
@@ -8,7 +8,8 @@ import {
     getListBackWithUntouchedPieces,
     getListBackWithActivePieces,
     getResetMemoryList,
-    getResetPlayersList, } from "../utils/HelperFuntioncs";
+    getResetPlayersList,
+    displayTime, } from "../utils/HelperFuntioncs";
 import { NavigateFunction } from "react-router-dom";
 import menuSettingsData from "../data/menuSettingsData.json";
 
@@ -19,10 +20,15 @@ type ContextValueTypes = {
     selectedSettings: SelectedSettingsType;
     memoryPiecesList: MemoryPieceType[];
     playersList: PlayersType[];
+    isSolo: boolean;
+    moves: number;
+    countdown: string;
     handleClickOnStartMenuButtons: (buttonLabel: string, panelId: number) => void;
     handleClickOnPiece: (id: number) => void;
     restartGame: () => void;
     navigateToMainMenu: (navigate: NavigateFunction) => void;
+    pauseGame: () => void;
+    resumeGame: () => void;
 };
 
 type ContextType = {
@@ -36,24 +42,44 @@ const initialStoredMemoryPieces = localStorage.getItem("memoryPieces");
 
 export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
     const [startMenuSettings, setStartMenuSettings] = useState<StartMenuSettingsType[]>(initialStoredMenuSettings ? JSON.parse(initialStoredMenuSettings) : menuSettingsData);
-    const [countdown, setCountdown] = useState("1:59");
-    const [moves, setMoves] = useState("0");
+    const [countdown, setCountdown] = useState("0:00");
+    const [moves, setMoves] = useState(0);
+    const [isCountDownActive, setIsCountDownActive] = useState(false);
     const [selectedSettings, setSelectedSettings] = useState<SelectedSettingsType>(initialStoredSettings ? JSON.parse(initialStoredSettings) : {theme: "Numbers", playerNumbers: 1, grid: "4x4"});
     const [playersList, setPlayersList] = useState<PlayersType[]>(initialStoredPlayers ? JSON.parse(initialStoredPlayers) : []);
     const [memoryPiecesList, setMemoryPiecesList] = useState<MemoryPieceType[]>(initialStoredMemoryPieces ? JSON.parse(initialStoredMemoryPieces) : [])
+    const [isSolo, setIsSolo] = useState(false);
 
     const iconArray = ["anchor.svg", "car.svg", "chemistry.svg", "chinese.svg", "hand.svg", "moon.svg", "snow.svg", "soccer.svg", "sun.svg", "flower.svg", "horse.svg", "key.svg", "rectangle.svg", "rhombus.svg", "star.svg", "triangle.svg", "circle.svg", "leaf.svg"];
-    const winningSound = new Audio("/win.mp3")
+    const winningSound = new Audio("/win.mp3");
+    const totalSecondsRef = useRef(0);
 
     const handleClickOnPiece = (id: number) => {
+      if(isSolo) {
+        setMoves(prev => prev + 1)
+        setIsCountDownActive(true);
+      }; 
+     
       const numberOfClickedPieces = memoryPiecesList.filter(piece => piece.isClicked).length;
       const updatedMemoryArray = memoryPiecesList.map((piece, index) => {
-        if(index !== id || numberOfClickedPieces > 1 || piece.taken) return piece;
-          
-        return {...piece, isClicked: true}
-      })
-      setMemoryPiecesList(updatedMemoryArray)
+          if(index !== id || numberOfClickedPieces > 1 || piece.taken) return piece;
+            
+          return {...piece, isClicked: true}
+      });
+      
+      setMemoryPiecesList(updatedMemoryArray);
     };
+
+    useEffect(() => {
+      if(isCountDownActive) {
+        const interval = setInterval(() => {
+          totalSecondsRef.current ++;
+          setCountdown(displayTime(totalSecondsRef.current))
+        }, 1000);
+
+        return () => clearInterval(interval)
+      }
+    }, [isCountDownActive]);
 
     const handleClickOnStartMenuButtons = (buttonLabel: string, panelId: number) => {
         const updatedStartMenuSettings = startMenuSettings.map(panel => {
@@ -71,7 +97,6 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
         setStartMenuSettings(updatedStartMenuSettings)
     };  
     
-
     const updatePlayersTurn = (playersList: PlayersType[]) => {
       const updatedPlayersList = [...playersList];
       const PlayerIndex = updatedPlayersList.findIndex(player => player.selected);
@@ -95,24 +120,32 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
       setPlayersList(updatedPlayersList)
     };
 
-    useEffect(() => {
-      // setting array length according to number of players selected, and then using the map method to set the player numbers 
-      const playerArray = Array.from( {length: selectedSettings.playerNumbers}, (item, index) => item = {player: index + 1, score: 0, selected: false});
-      playerArray[0].selected = true;
-      setPlayersList(playerArray)
-    }, [selectedSettings.playerNumbers]);
+    const restartGame = () => {
+      if(isSolo) {
+        setMoves(0);
+        setCountdown("0:00")
+        setIsCountDownActive(false)
+        totalSecondsRef.current = 0;
+      };
+      setMemoryPiecesList(getResetMemoryList(memoryPiecesList))
+      setPlayersList(getResetPlayersList(playersList)) 
+    };
 
-    useEffect(() => {
-      // updating memory pieces depnding on theme and gridsize
-      if(selectedSettings.theme === "Icons") {
-        let emptyArray: string[] = [];
-        const finalArray = selectedSettings.grid === "4x4" ? createFourByFourArray(emptyArray, iconArray) : createSixbySixArray(iconArray);
-        setMemoryPiecesList(finalArray)
-      } else {
-        const gridSize = selectedSettings.grid === "4x4" ? 8 : 18
-        setMemoryPiecesList(createNumberArray(gridSize))
-      }
-    }, [selectedSettings.grid, selectedSettings.theme])
+    const pauseGame = () => {
+      if(!isSolo) return;
+      setIsCountDownActive(false)
+    };
+
+    const resumeGame = () => {
+      if(!isSolo) return;
+      setIsCountDownActive(true)
+    };
+
+    const navigateToMainMenu = (navigate: NavigateFunction) => {
+      restartGame();
+      setStartMenuSettings(menuSettingsData)
+      navigate("/")
+    };
 
     useEffect(() => {
       // array to keep track of clicked pieces
@@ -154,18 +187,6 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
       }
     }, [memoryPiecesList])
 
-    const restartGame = () => {
-      setMemoryPiecesList(getResetMemoryList(memoryPiecesList))
-      setPlayersList(getResetPlayersList(playersList)) 
-    };
-
-    const navigateToMainMenu = (navigate: NavigateFunction) => {
-      setMemoryPiecesList(getResetMemoryList(memoryPiecesList))
-      setPlayersList(getResetPlayersList(playersList)) 
-      setStartMenuSettings(menuSettingsData)
-      navigate("/")
-    };
-
     useEffect(() => {
       let updatedSettings = {...selectedSettings}
       startMenuSettings.forEach(setting => {
@@ -183,6 +204,30 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
       }); 
       setSelectedSettings(updatedSettings)
     }, [startMenuSettings]);
+
+    useEffect(() => {
+      if(selectedSettings.playerNumbers === 1) {
+        setIsSolo(true)
+      } else {
+        // setting array length according to number of players selected, and then using the map method to set the player numbers 
+        const playerArray = Array.from( {length: selectedSettings.playerNumbers}, (item, index) => item = {player: index + 1, score: 0, selected: false});
+        playerArray[0].selected = true;
+        setIsSolo(false)
+        setPlayersList(playerArray)
+      };
+    }, [selectedSettings.playerNumbers]);
+
+    useEffect(() => {
+      // updating memory pieces depnding on theme and gridsize
+      if(selectedSettings.theme === "Icons") {
+        let emptyArray: string[] = [];
+        const finalArray = selectedSettings.grid === "4x4" ? createFourByFourArray(emptyArray, iconArray) : createSixbySixArray(iconArray);
+        setMemoryPiecesList(finalArray)
+      } else {
+        const gridSize = selectedSettings.grid === "4x4" ? 8 : 18
+        setMemoryPiecesList(createNumberArray(gridSize))
+      }
+    }, [selectedSettings.grid, selectedSettings.theme]);
 
     useEffect(() => {
       localStorage.setItem("menuSettings", JSON.stringify(startMenuSettings))
@@ -205,10 +250,15 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
         selectedSettings: selectedSettings,
         memoryPiecesList: memoryPiecesList,
         playersList: playersList,
+        isSolo: isSolo,
+        moves: moves,
+        countdown: countdown,
         handleClickOnStartMenuButtons: handleClickOnStartMenuButtons,
         handleClickOnPiece: handleClickOnPiece,
         restartGame: restartGame,
         navigateToMainMenu: navigateToMainMenu,
+        pauseGame: pauseGame,
+        resumeGame: resumeGame,
     };
 
     return (

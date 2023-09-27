@@ -36,3 +36,9 @@ export type PlayersType = {
     selected: boolean;
     winner?: boolean;
 };
+
+export type ModalsType = {
+    lightbox: boolean;
+    menu: boolean;
+    winner: boolean;
+};
