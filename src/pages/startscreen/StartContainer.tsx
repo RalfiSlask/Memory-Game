@@ -3,7 +3,7 @@ import MediumButton from "./ui/MediumButton";
 import SmallButton from "./ui/SmallButton";
 import Context from "../../context/Context";
 import { useContext } from "react";
-import LargeButton from "./ui/LargeButton";
+import LargeButton from "../../components/ui/LargeButton";
 import { useNavigate } from "react-router-dom";
 
 const StartContainer = () => {

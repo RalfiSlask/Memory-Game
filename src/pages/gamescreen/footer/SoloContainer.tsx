@@ -1,5 +1,5 @@
 import React from 'react'
-import ContainerHeading from '../ContainerHeading'
+import ContainerHeading from '../../../components/ui/ContainerHeading'
 
 type SoloPropsType = {
   title: string;

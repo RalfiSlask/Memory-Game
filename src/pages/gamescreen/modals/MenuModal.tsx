@@ -1,4 +1,4 @@
-import LargeButton from "../../startscreen/ui/LargeButton";
+import LargeButton from "../../../components/ui/LargeButton";
 import UIContext from "../../../context/UIContext"
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";

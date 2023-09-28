@@ -1,4 +1,4 @@
-import ContainerHeading from "../ContainerHeading";
+import ContainerHeading from "../../../components/ui/ContainerHeading";
 import UIContext from "../../../context/UIContext";
 import { useContext } from "react";
 import { PlayersType } from "../../../types/types";

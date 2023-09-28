@@ -3,7 +3,6 @@ import UIContext from "../../context/UIContext";
 import { useContext } from "react";
 import MemoryPiece from "./MemoryPiece";
 
-
 const MemoryContainer = () => {
   const context = useContext(Context);
   const uiContext = useContext(UIContext);
