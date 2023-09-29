@@ -1,4 +1,4 @@
-![Memory-Game](./preview.PNG)
+![Memory-Game](./preview.png)
 
 
 Built with
