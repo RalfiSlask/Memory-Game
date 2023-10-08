@@ -1,6 +1,4 @@
 import { MemoryPieceType } from "../../types/types";
-import IconDisplay from "./IconDisplay";
-import car from "../../assets/logo.svg";
 
 type MemoryNumberPropsType = {
     pieceLarge: boolean;

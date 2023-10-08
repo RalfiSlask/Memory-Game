@@ -28,14 +28,6 @@ const MemoryContainer = () => {
           memoryPiece={memoryPiecesList[index]}
         /> 
       })}
-     
-    <div>
-        <svg width="38" height="40" viewBox="0 0 38 40" xmlns="http://www.w3.org/2000/svg">
-            <path d="M19 2 Q38 20 19 38 Q0 20 19 2 M19 38 L19 26" fill="black"/>
-        </svg>
-    </div>
-
-
     </div>
   )
 }

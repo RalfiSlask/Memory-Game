@@ -69,10 +69,6 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
     };
 
     useEffect(() => {
-      console.log(memoryPiecesList)
-    })
-
-    useEffect(() => {
       if(isCountDownActive) {
         const interval = setInterval(() => {
           totalSecondsRef.current ++;
