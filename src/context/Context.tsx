@@ -36,7 +36,7 @@ type ContextType = {
     children: ReactNode;
 };
 
-const ICON_ARRAY = ["anchor.svg", "car.svg", "chemistry.svg", "chinese.svg", "hand.svg", "moon.svg", "snow.svg", "soccer.svg", "sun.svg", "flower.svg", "horse.svg", "key.svg", "rectangle.svg", "rhombus.svg", "star.svg", "triangle.svg", "circle.svg", "leaf.svg"];
+
 
 export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
     const [startMenuSettings, setStartMenuSettings] = useLocalStorage<StartMenuSettingsType[]>("menuSettings", menuSettingsData);
@@ -50,6 +50,7 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
 
     const winningSoundRef = useRef(new Audio("/win.mp3"));
     const totalSecondsRef = useRef(0);
+    const ICON_ARRAY = ["anchor.svg", "car.svg", "chemistry.svg", "chinese.svg", "hand.svg", "moon.svg", "snow.svg", "soccer.svg", "sun.svg", "flower.svg", "horse.svg", "key.svg", "rectangle.svg", "rhombus.svg", "star.svg", "triangle.svg", "circle.svg", "leaf.svg"];
 
     const handleClickOnPiece = (id: number) => {
       if(isSolo) {
@@ -103,7 +104,9 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
       });
       // Move to next player, and using modulus to check if we should go back to player 1
       const nextIndex = (PlayerIndex + 1) % updatedPlayersList.length;
-      updatedPlayersList[nextIndex].selected = true;
+      if(updatedPlayersList[nextIndex]) {
+        updatedPlayersList[nextIndex].selected = true;
+      }
       setPlayersList(updatedPlayersList)
     }, [setPlayersList]);
 
