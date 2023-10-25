@@ -158,7 +158,6 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
         // if the two pieces clicked are the same
         if(clickedPiecesArray.every(piece => piece === clickedPiecesArray[0])) {
           // update the playerscore and set the pieces as taken
-          winningSoundRef.current.play();
           updatePlayersScore(playersList)
           setMemoryPiecesList(getListBackWithActivePieces(piecesList)) 
         } else {
