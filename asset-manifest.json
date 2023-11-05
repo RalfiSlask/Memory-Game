@@ -1,13 +1,32 @@
 {
   "files": {
     "main.css": "/Memory-Game/static/css/main.83265286.css",
-    "main.js": "/Memory-Game/static/js/main.fde3964b.js",
+    "main.js": "/Memory-Game/static/js/main.9e61695f.js",
+    "static/media/logo.svg": "/Memory-Game/static/media/logo.e27698ac178fd435138a.svg",
+    "static/media/snow.svg": "/Memory-Game/static/media/snow.8c1b223d0c7716547151.svg",
+    "static/media/sun.svg": "/Memory-Game/static/media/sun.84fef07f82ba26938a58.svg",
+    "static/media/car.svg": "/Memory-Game/static/media/car.28cc5982dbdc79e2095c.svg",
+    "static/media/anchor.svg": "/Memory-Game/static/media/anchor.0d262f02ffbd747607d8.svg",
+    "static/media/hand.svg": "/Memory-Game/static/media/hand.ee687cf83046c66214b4.svg",
+    "static/media/soccer.svg": "/Memory-Game/static/media/soccer.2e060ef10670612658b6.svg",
+    "static/media/chinese.svg": "/Memory-Game/static/media/chinese.7fedee9102e3f9ebb414.svg",
     "index.html": "/Memory-Game/index.html",
+    "static/media/moon.svg": "/Memory-Game/static/media/moon.10bc16e924e111f2020b.svg",
+    "static/media/chemistry.svg": "/Memory-Game/static/media/chemistry.b276e2d6c9c08272f128.svg",
+    "static/media/horse.svg": "/Memory-Game/static/media/horse.ac111941ddc0970a98a8.svg",
+    "static/media/key.svg": "/Memory-Game/static/media/key.b95abc4361f7425e0d22a5a923d988e1.svg",
+    "static/media/flower.svg": "/Memory-Game/static/media/flower.7c560008dea6ee213966.svg",
+    "static/media/circle.svg": "/Memory-Game/static/media/circle.182d8a0f7fbfac8064d2.svg",
+    "static/media/star.svg": "/Memory-Game/static/media/star.24dd2e891d715ec0672d.svg",
+    "static/media/rhombus.svg": "/Memory-Game/static/media/rhombus.ac7ee5a19a2872ab528f.svg",
+    "static/media/triangle.svg": "/Memory-Game/static/media/triangle.d6920d286a6271ab5ad0.svg",
+    "static/media/leaf.svg": "/Memory-Game/static/media/leaf.7836722ef3f977dd0a81.svg",
+    "static/media/rectangle.svg": "/Memory-Game/static/media/rectangle.5d5aba0d1932000df55f.svg",
     "main.83265286.css.map": "/Memory-Game/static/css/main.83265286.css.map",
-    "main.fde3964b.js.map": "/Memory-Game/static/js/main.fde3964b.js.map"
+    "main.9e61695f.js.map": "/Memory-Game/static/js/main.9e61695f.js.map"
   },
   "entrypoints": [
     "static/css/main.83265286.css",
-    "static/js/main.fde3964b.js"
+    "static/js/main.9e61695f.js"
   ]
 }
