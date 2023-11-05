@@ -36,8 +36,6 @@ type ContextType = {
     children: ReactNode;
 };
 
-
-
 export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
     const [startMenuSettings, setStartMenuSettings] = useLocalStorage<StartMenuSettingsType[]>("menuSettings", menuSettingsData);
     const [selectedSettings, setSelectedSettings] = useLocalStorage<SelectedSettingsType>("selectedSettings", {theme: "Numbers", playerNumbers: 1, grid: "4x4"});
@@ -48,7 +46,7 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
     const [isCountDownActive, setIsCountDownActive] = useState(false);
     const [isSolo, setIsSolo] = useState(false);
 
-    const winningSoundRef = useRef(new Audio("/win.mp3"));
+    /* const winningSoundRef = useRef(new Audio("/win.mp3")); */
     const totalSecondsRef = useRef(0);
     const ICON_ARRAY = ["anchor.svg", "car.svg", "chemistry.svg", "chinese.svg", "hand.svg", "moon.svg", "snow.svg", "soccer.svg", "sun.svg", "flower.svg", "horse.svg", "key.svg", "rectangle.svg", "rhombus.svg", "star.svg", "triangle.svg", "circle.svg", "leaf.svg"];
 
@@ -67,6 +65,11 @@ export const ContextProvider: React.FC<ContextType> = ( {children} ) => {
       
       setMemoryPiecesList(updatedMemoryArray);
     };
+    
+
+    useEffect(() => {
+      console.log(memoryPiecesList)
+    }, [memoryPiecesList])
 
     useEffect(() => {
       if(isCountDownActive) {
