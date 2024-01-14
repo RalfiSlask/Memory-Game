@@ -16,7 +16,7 @@ Explore the live demo of the Memory Game [here](https://ralfislask.github.io/Mem
 
 ## Status
 
-This project is marked as "Finished."
+This project is marked as "In Progress."
 
 ## Getting Started
 
