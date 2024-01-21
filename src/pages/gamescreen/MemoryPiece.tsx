@@ -4,38 +4,50 @@ import Context from "../../context/Context";
 import MemoryItem from "./MemoryItem";
 
 type MemoryPiecePropsType = {
-    index: number;
-    dimensions: string;
-    memoryPiece: MemoryPieceType;
-    pieceLarge: boolean;
+  index: number;
+  dimensions: string;
+  memoryPiece: MemoryPieceType;
+  pieceLarge: boolean;
 };
 
-const MemoryPiece: React.FC<MemoryPiecePropsType> = ( {index, dimensions, memoryPiece, pieceLarge} ) => {
-    const context = useContext(Context);
-  
-    if(!context) {
-        throw new Error("Does not exist in contextProvider")
-    };
+const MemoryPiece: React.FC<MemoryPiecePropsType> = ({
+  index,
+  dimensions,
+  memoryPiece,
+  pieceLarge,
+}) => {
+  const context = useContext(Context);
 
-    if(!memoryPiece) {
-        return null;
-    };
+  if (!context) {
+    throw new Error("Does not exist in contextProvider");
+  }
 
-    const { handleClickOnPiece } = context;
+  if (!memoryPiece) {
+    return null;
+  }
 
-    const memoryPieceRightAnimation = memoryPiece.taken && !memoryPiece.isClicked ? "animate-green-flash" : "";
-    const memoryPieceBackgroundColor = memoryPiece.isClicked ? "bg-[#FDA214]" : memoryPiece.taken ? "bg-[#BCCED9]" : "bg-[#304859] hover:bg-[#6395B8]";
+  const { handleClickOnPiece } = context;
 
-    return (
-        <div onClick={() => {handleClickOnPiece(index)}} className={`${dimensions} ${memoryPieceBackgroundColor} ${memoryPieceRightAnimation} cursor-pointer flex justify-center items-center`}>
-            { (memoryPiece.isClicked || memoryPiece.taken) &&
-            <MemoryItem 
-                memoryPiece={memoryPiece} 
-                pieceLarge={pieceLarge} 
-            />
-            }
-        </div>
-    )
-}
+  const memoryPieceRightAnimation =
+    memoryPiece.taken && !memoryPiece.isClicked ? "animate-green-flash" : "";
+  const memoryPieceBackgroundColor = memoryPiece.isClicked
+    ? "bg-[#FDA214]"
+    : memoryPiece.taken
+    ? "bg-[#BCCED9]"
+    : "bg-[#304859] hover:bg-[#6395B8]";
 
-export default MemoryPiece
+  return (
+    <div
+      onClick={() => {
+        handleClickOnPiece(index);
+      }}
+      className={`${dimensions} ${memoryPieceBackgroundColor} ${memoryPieceRightAnimation} cursor-pointer flex justify-center items-center`}
+    >
+      {(memoryPiece.isClicked || memoryPiece.taken) && (
+        <MemoryItem memoryPiece={memoryPiece} pieceLarge={pieceLarge} />
+      )}
+    </div>
+  );
+};
+
+export default MemoryPiece;
