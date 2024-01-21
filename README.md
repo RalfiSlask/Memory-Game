@@ -1,30 +1,59 @@
-# React + TypeScript + Vite
+# Memory Game
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![Memory Game Preview](./preview.PNG)
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Semantic HTML5 markup
+- CSS
+- TypeScript
+- React
+- Tailwind CSS
 
-## Expanding the ESLint configuration
+## Code Formatting and Linting
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### Prettier
 
-- Configure the top-level `parserOptions` property like this:
+I used Prettier for code formatting. It helps to format the code and making it consistent throughout the whole project.
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+### Eslint
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+For linting i used ESlint. It helped me catch errors in the code and uphold typescript standards. The Eslint file
+follows common rules for this kind of project.
+
+## Live Demo
+
+Explore the live demo of the Memory Game [here](https://ralfislask.github.io/Memory-Game/).
+
+## Status
+
+This project is marked as "In Progress."
+
+## Getting Started
+
+To run the Memory Game on your local machine, follow these steps:
+
+1. Download or clone the repository.
+2. Install the necessary dependencies by running `npm install`.
+3. Start the application using `npm start` (Create React App).
+
+## App Description
+
+The Memory Game is an engaging web application that challenges your memory skills. It offers various options to customize your gameplay experience:
+
+1. **Theme**: Choose between Numbers or Icons to match.
+
+2. **Number of Players**: Play solo or invite friends for a multiplayer experience (up to 4 players).
+
+3. **Grid Size**: Select the grid size - 4x4 or 6x6.
+
+### Gameplay Features
+
+- For solo players, the game includes a timer and a moves counter to track your progress and performance.
+- Multiplayer mode displays each player's scores, and the player with the highest score wins after completing the game.
+- Enjoy the convenience of restart and new game buttons to enhance your gaming experience.
+
+## Author
+
+- Frontend Mentor - [@RalfiSlask](https://www.frontendmentor.io/profile/RalfiSlask)
+- GitHub - [RalfiSlask](https://github.com/RalfiSlask)
