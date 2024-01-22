@@ -12,7 +12,7 @@ root.render(
   <React.StrictMode>
     <UIContextProvider>
       <ContextProvider>
-        <BrowserRouter basename="/Memory-Game">
+        <BrowserRouter basename="/Memory-Game/">
           <Routes>
             <Route path="/" element={<StartScreen />} />
             <Route path="/game" element={<GameScreen />} />

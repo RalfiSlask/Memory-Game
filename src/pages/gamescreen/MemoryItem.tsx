@@ -2,7 +2,7 @@ import { MemoryPieceType } from "../../types/types";
 import { useEffect, useState } from "react";
 
 const importImage = (name: string) => {
-  return `/assets/${name}`;
+  return `${import.meta.env.BASE_URL}/assets/${name}`;
 };
 
 type MemoryNumberPropsType = {
